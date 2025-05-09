@@ -85,3 +85,9 @@ export const formatServerImages = (imageLink) => {
     return imageLink;
   } else return formattedImage;
 };
+export const deleteConfirmation = (title, message) => {
+  return new Promise((resolve) => {
+    const isConfirmed = window.confirm(`${title}\n${message}`);
+    resolve(isConfirmed);
+  });
+};

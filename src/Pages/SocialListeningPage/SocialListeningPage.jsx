@@ -421,7 +421,7 @@ const SocialListeningPage = () => {
                           //     </div>
                           //   </div>
                           // )
-                          ""
+                          ("")
                         )}
                       </div>
                     </Grid>
@@ -435,7 +435,6 @@ const SocialListeningPage = () => {
       {displayPostList.length ? (
         <Feed data={displayPostList} getFeed={getPosts} page={page} />
       ) : null}
-
       {noOfPeopleLoading || socialListeningError ? (
         <SnackBarDownload
           sociallistening="true"

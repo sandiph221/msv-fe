@@ -1,5 +1,5 @@
 import { useState, useEffect, forwardRef } from "react";
-import MaterialTable from "material-table";
+import MaterialTable from "@material-table/core";
 import {
   Avatar,
   IconButton,

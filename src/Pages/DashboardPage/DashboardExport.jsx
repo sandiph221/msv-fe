@@ -256,7 +256,6 @@ export const DashboardExport = ({
               }, 2000);
             }}
             style={{ fontSize: 15, cursor: "pointer" }}
-            onClick={onClick}
           >
             <img
               style={{ width: 20, height: 20, marginRight: 5 }}

@@ -6,10 +6,10 @@ import {
   BottomNavigation,
   useTheme,
   useMediaQuery,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { Line, Chart } from "react-chartjs-2";
-import { ToggleButton } from "@mui/lab";
-import { ToggleButtonGroup } from "@mui/lab";
 import { blue } from "@mui/material/colors";
 
 const useStyles = makeStyles((test) => ({

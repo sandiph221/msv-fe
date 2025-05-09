@@ -13,9 +13,9 @@ import {
   useMediaQuery,
   useTheme,
   withStyles,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
-import { ToggleButton } from "@mui/lab";
-import { ToggleButtonGroup } from "@mui/lab";
 import { useEffect } from "react";
 import { Bar, Chart } from "react-chartjs-2";
 import { useSelector } from "react-redux";

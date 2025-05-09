@@ -5,14 +5,7 @@ import path from "path";
 export default defineConfig({
   plugins: [
     react({
-      // This is needed for React 18
       jsxRuntime: "automatic",
-      // Add Babel configuration if needed
-      babel: {
-        babelrc: false,
-        configFile: false,
-      },
-      // Include .js files as JSX
       include: "**/*.{jsx,js}",
     }),
   ],
@@ -27,10 +20,6 @@ export default defineConfig({
       store: path.resolve(__dirname, "./src/store"),
       utils: path.resolve(__dirname, "./src/utils"),
     },
-  },
-  esbuild: {
-    jsx: "automatic",
-    jsxInject: `import React from 'react'`,
   },
   optimizeDeps: {
     esbuildOptions: {

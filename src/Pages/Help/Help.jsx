@@ -295,7 +295,7 @@ const Help = () => {
   };
 
   useEffect(() => {
-    if (editInfo !== {}) {
+    if (Object.keys(editInfo).length > 0) {
       setArticle((prevState) => ({
         ...prevState,
         title: editInfo.title,

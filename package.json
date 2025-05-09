@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@material-table/core": "^6.4.4",
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
     "@react-oauth/google": "^0.12.2",
@@ -27,6 +28,7 @@
     "html-react-parser": "^5.2.3",
     "html2canvas": "^1.4.1",
     "jodit-react": "^5.2.19",
+    "jquery": "^3.7.1",
     "luxon": "^3.6.1",
     "moment-timezone": "^0.5.48",
     "notistack": "^3.0.2",
