@@ -1,19 +1,19 @@
-import axios from 'axios';
-import { Redirect } from 'react-router';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import { Redirect } from "react-router";
+import { toast } from "react-toastify";
 
 export const SignIn = (user) => async (dispatch) =>
   new Promise(function (resolve, reject) {
     /* api call to Login User */
     axios
-      .post('/sign-in', user)
+      .post("/sign-in", user)
       .then((response) => {
         if (response.data.status && response.data.data) {
-          localStorage.setItem('userInfo', JSON.stringify(response.data.data));
-          toast.success('Successful Login');
-          console.log('response.data.data', response.data.data);
+          localStorage.setItem("userInfo", JSON.stringify(response.data.data));
+          toast.success("Successful Login");
+          console.log("response.data.data", response.data.data);
           dispatch({
-            type: 'SIGNIN',
+            type: "SIGNIN",
             payload: response.data.data,
           });
           resolve(response);
@@ -33,11 +33,11 @@ export const FacebookSignIn = (accessToken, user) => async (dispatch) =>
       .post(`/facebook/sign-in?access_token=${accessToken}`, user)
       .then((response) => {
         if (response.data.status && response.data.data) {
-          localStorage.setItem('userInfo', JSON.stringify(response.data.data));
-          toast.success('Successful Login');
+          localStorage.setItem("userInfo", JSON.stringify(response.data.data));
+          toast.success("Successful Login");
 
           dispatch({
-            type: 'SIGNIN',
+            type: "SIGNIN",
             payload: response.data.data,
           });
           resolve(response);
@@ -52,12 +52,11 @@ export const FacebookSignIn = (accessToken, user) => async (dispatch) =>
 
 export const SignOut = () => (dispatch) =>
   new Promise(function (resolve, reject) {
-    <Redirect to='/login' />;
     axios
-      .get('/logout')
+      .get("/logout")
       .then((response) => {
         dispatch({
-          type: 'LOGOUT',
+          type: "LOGOUT",
         });
         resolve(response);
       })
@@ -70,7 +69,7 @@ export const ForgotPassword = (email, subdomain) => async (dispatch) =>
   new Promise(function (resolve, reject) {
     /* api call to Login User */
     axios
-      .post('/forgot-password', { email, subdomain })
+      .post("/forgot-password", { email, subdomain })
       .then((response) => {
         toast.success(response.data.message);
         resolve(response);
@@ -84,7 +83,7 @@ export const ChangePassword = (password, confirm_password) => async () =>
   new Promise(function (resolve, reject) {
     /* api call to Login User */
     axios
-      .put('/change-password', { password, confirm_password })
+      .put("/change-password", { password, confirm_password })
       .then((response) => {
         toast.success(response.data.message);
 
@@ -98,13 +97,13 @@ export const ChangePassword = (password, confirm_password) => async () =>
 export const ChangePasswordEmailVerification =
   (authorization, password) => (dispatch) => {
     dispatch({
-      type: 'CHANGE_PASSWORD_REQUEST',
+      type: "CHANGE_PASSWORD_REQUEST",
     });
     axios
       .post(`/change-password-mail`, { authorization, password })
       .then((response) => {
         dispatch({
-          type: 'CHANGE_PASSWORD',
+          type: "CHANGE_PASSWORD",
           payload: response.data,
         });
         toast.success(response.data.message);
@@ -113,7 +112,7 @@ export const ChangePasswordEmailVerification =
       .catch((error) => {
         toast.error(error.response.message);
         dispatch({
-          type: 'CHANGE_PASSWORD_FAILED',
+          type: "CHANGE_PASSWORD_FAILED",
         });
       });
   };
@@ -122,7 +121,7 @@ export const getSignInUser = (userId) => (dispatch) => {
   /* api call made to get sign in user details */
   axios.get(`users/${userId}`).then((response) => {
     dispatch({
-      type: 'GET_SIGN_IN_USER',
+      type: "GET_SIGN_IN_USER",
       payload: response.data.data,
     });
   });
@@ -147,7 +146,7 @@ export const updateCustomerFromProfile = (customer) => (dispatch) =>
       formData.set(key, value);
     }
     axios
-      .put('me/update', data)
+      .put("me/update", data)
       .then((response) => {
         toast.success(response.data.message);
         resolve(response);

@@ -7,6 +7,7 @@ import { Information } from "./components/Information";
 const Homepage = () => {
   return (
     <div className="container">
+      HELLO FROM HERLL
       <Hero />
       <Information />
       <Features />

@@ -1,5 +1,10 @@
-import { Navigate, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 
 // Pages
 import LoginPage from "./Pages/Login/Login";
@@ -38,265 +43,201 @@ import UserActivity from "./Admin/Pages/UserActivity/UserActivity";
 import Homepage from "./Pages/Web/Homepage";
 import { ChangePassword } from "./store/actions/AuthAction";
 
-const PrivateRoute = ({ children }) => {
+// Auth protection components
+const PrivateLayout = () => {
   const { user } = useSelector((state) => state.auth);
-  return user ? children : <Navigate to="/login" replace />;
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
 };
 
-const AdminRoute = ({ children }) => {
+const AdminLayout = () => {
   const { user } = useSelector((state) => state.auth);
-  return user && user.isAdmin ? children : <Navigate to="/login" replace />;
+
+  if (!user || !user.isAdmin) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
 };
 
 function App() {
-  return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<Homepage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/card-details" element={<CardDetailPage />} />
-      <Route path="/change-password" element={<ChangePassword />} />
-      <Route
-        path="/change-password-from-mail"
-        element={<ChangePasswordFromMail />}
-      />
-      <Route path="/payment/verify" element={<PaymentVerifyPage />} />
-      <Route path="/payment/cancel" element={<PaymentCancelPage />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+  const router = createBrowserRouter([
+    // Public Routes
+    {
+      path: "/",
+      element: <Homepage />,
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "/register",
+      element: <RegisterPage />,
+    },
+    {
+      path: "/card-details",
+      element: <CardDetailPage />,
+    },
+    {
+      path: "/changes-password",
+      element: <ChangePassword />,
+    },
+    {
+      path: "/change-password-from-mail",
+      element: <ChangePasswordFromMail />,
+    },
+    {
+      path: "/payment/verify",
+      element: <PaymentVerifyPage />,
+    },
+    {
+      path: "/payment/cancel",
+      element: <PaymentCancelPage />,
+    },
+    {
+      path: "/privacy-policy",
+      element: <PrivacyPolicy />,
+    },
 
-      {/* Private Routes */}
-      <Route
-        path="/user-dashboard"
-        element={
-          <PrivateRoute>
-            <DashboardPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/brand-overview"
-        element={
-          <PrivateRoute>
-            <ProfileOverview />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/comparision"
-        element={
-          <PrivateRoute>
-            <ProfileListingPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/profile-comparison"
-        element={
-          <PrivateRoute>
-            <ComparisonPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/social-listening"
-        element={
-          <PrivateRoute>
-            <SocialListeningPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/content-newsfeed"
-        element={
-          <PrivateRoute>
-            <ContentNewsFeedPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/help/faq"
-        element={
-          <PrivateRoute>
-            <HelpPageFaq />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/help/how-to-document"
-        element={
-          <PrivateRoute>
-            <HelpPageDoucment />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/help/videos"
-        element={
-          <PrivateRoute>
-            <HelpPageVideo />
-          </PrivateRoute>
-        }
-      />
+    // Private Routes
+    {
+      element: <PrivateLayout />,
+      children: [
+        {
+          path: "/user-dashboard",
+          element: <DashboardPage />,
+        },
+        {
+          path: "/brand-overview",
+          element: <ProfileOverview />,
+        },
+        {
+          path: "/comparision",
+          element: <ProfileListingPage />,
+        },
+        {
+          path: "/profile-comparison",
+          element: <ComparisonPage />,
+        },
+        {
+          path: "/social-listening",
+          element: <SocialListeningPage />,
+        },
+        {
+          path: "/content-newsfeed",
+          element: <ContentNewsFeedPage />,
+        },
+        {
+          path: "/help/faq",
+          element: <HelpPageFaq />,
+        },
+        {
+          path: "/help/how-to-document",
+          element: <HelpPageDoucment />,
+        },
+        {
+          path: "/help/videos",
+          element: <HelpPageVideo />,
+        },
+      ],
+    },
 
-      {/* Admin Routes */}
-      <Route
-        path="/admin/dashboard"
-        element={
-          <AdminRoute>
-            <AdminDashboardPage />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/admin/user-activity"
-        element={
-          <AdminRoute>
-            <UserActivity />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/contact-support"
-        element={
-          <AdminRoute>
-            <ContactSupport />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/admin/analytics"
-        element={
-          <AdminRoute>
-            <Analytics />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/subscription-management"
-        element={
-          <AdminRoute>
-            <SubscriptionSetting />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/subscription-details"
-        element={
-          <AdminRoute>
-            <SubscriptionDetail />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/plan/create"
-        element={
-          <AdminRoute>
-            <CreatePlan />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/plan/:id"
-        element={
-          <AdminRoute>
-            <EditPlan />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/account-management"
-        element={
-          <AdminRoute>
-            <AccountManagement />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/upgrade"
-        element={
-          <AdminRoute>
-            <UpgradePlan />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/user-management"
-        element={
-          <AdminRoute>
-            <UserManagementPage />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/cms"
-        element={
-          <AdminRoute>
-            <ContentManagement />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/cms/page/new"
-        element={
-          <AdminRoute>
-            <NewPage />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/cms/page/:id/edit"
-        element={
-          <AdminRoute>
-            <NewPage />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/cms/faq/new"
-        element={
-          <AdminRoute>
-            <FAQ />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/cms/faq/:id/edit"
-        element={
-          <AdminRoute>
-            <FAQ />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <AdminRoute>
-            <ProfilePage />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/customer-admin-setting"
-        element={
-          <AdminRoute>
-            <CustomerAdminSetting />
-          </AdminRoute>
-        }
-      />
-      <Route
-        path="/help"
-        element={
-          <AdminRoute>
-            <Help />
-          </AdminRoute>
-        }
-      />
+    // Admin Routes
+    {
+      element: <AdminLayout />,
+      children: [
+        {
+          path: "/admin/dashboard",
+          element: <AdminDashboardPage />,
+        },
+        {
+          path: "/admin/user-activity",
+          element: <UserActivity />,
+        },
+        {
+          path: "/contact-support",
+          element: <ContactSupport />,
+        },
+        {
+          path: "/admin/analytics",
+          element: <Analytics />,
+        },
+        {
+          path: "/subscription-management",
+          element: <SubscriptionSetting />,
+        },
+        {
+          path: "/subscription-details",
+          element: <SubscriptionDetail />,
+        },
+        {
+          path: "/plan/create",
+          element: <CreatePlan />,
+        },
+        {
+          path: "/plan/:id",
+          element: <EditPlan />,
+        },
+        {
+          path: "/account-management",
+          element: <AccountManagement />,
+        },
+        {
+          path: "/upgrade",
+          element: <UpgradePlan />,
+        },
+        {
+          path: "/user-management",
+          element: <UserManagementPage />,
+        },
+        {
+          path: "/cms",
+          element: <ContentManagement />,
+        },
+        {
+          path: "/cms/page/new",
+          element: <NewPage />,
+        },
+        {
+          path: "/cms/page/:id/edit",
+          element: <NewPage />,
+        },
+        {
+          path: "/cms/faq/new",
+          element: <FAQ />,
+        },
+        {
+          path: "/cms/faq/:id/edit",
+          element: <FAQ />,
+        },
+        {
+          path: "/profile",
+          element: <ProfilePage />,
+        },
+        {
+          path: "/customer-admin-setting",
+          element: <CustomerAdminSetting />,
+        },
+        {
+          path: "/help",
+          element: <Help />,
+        },
+      ],
+    },
 
-      {/* Catch-all Route */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  );
+    // Catch-all Route
+    {
+      path: "*",
+      element: <Navigate to="/" replace />,
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;
