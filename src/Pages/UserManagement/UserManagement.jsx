@@ -23,7 +23,7 @@ import {
   Typography,
   withStyles,
 } from '@mui/material';
-import React from 'react';
+
 import Layout from '../../Components/Layout';
 
 import { Delete, Edit } from '@mui/icons-material';

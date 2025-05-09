@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { makeStyles, withStyles } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';

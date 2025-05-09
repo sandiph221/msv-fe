@@ -1,4 +1,4 @@
-import React from "react";
+
 import {
   makeStyles,
   Box,
@@ -8,8 +8,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Line, Chart } from "react-chartjs-2";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import { ToggleButton } from "@mui/lab";
+import { ToggleButtonGroup } from "@mui/lab";
 import { blue } from "@mui/material/colors";
 
 const useStyles = makeStyles((test) => ({

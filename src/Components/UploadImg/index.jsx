@@ -6,137 +6,101 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
-  makeStyles,
+  Card,
+  CardActionArea,
+  CardHeader,
+  CardContent,
+  CardActions,
+  CardMedia,
+  Fab,
+  Icon,
+  styled,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-//Card
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
+
 import CloseIcon from "@mui/icons-material/Close";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
-
-import Fab from "@mui/material/Fab";
-
-import red from "@mui/material/colors/red";
-import blue from "@mui/material/colors/blue";
-
-import Icon from "@mui/material/Icon";
 import PageviewIcon from "@mui/icons-material/Pageview";
 import SearchIcon from "@mui/icons-material/Search";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import CollectionsIcon from "@mui/icons-material/Collections";
 
-//Tabs
-import { withStyles } from "@mui/material/styles";
+// Styled components to replace withStyles
+const Root = styled("div")(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "flex-end",
+  border: "1px solid rgba(0, 0, 0, 0.23)",
+  borderRadius: 10,
+}));
 
-const styles = (theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    border: "1px solid rgba(0, 0, 0, 0.23)",
-    borderRadius: 10,
-  },
-  uploadImgCard: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-    width: "100%",
-    height: 250,
-    boxShadow: "none",
-    backgroundColor: "transparent",
-    borderColor: "rgba(0, 0, 0, 0.23)",
-  },
-  icon: {
-    margin: theme.spacing.unit * 2,
-  },
-  iconHover: {
-    margin: theme.spacing.unit * 2,
-    "&:hover": {
-      color: red[800],
-    },
-  },
-  uploadContainer: {
-    width: "100%",
-  },
-  cardHeader: {
-    textalign: "center",
-    align: "center",
-    backgroundColor: "white",
-  },
-  input: {
-    opacity: 0,
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-  },
-  title: {
-    color: blue[800],
-    fontWeight: "bold",
-    fontFamily: "Montserrat",
-    align: "center",
-  },
-  button: {
-    color: "#F8C144",
-    margin: 10,
-    background: "rgba(248, 193, 68, 0.2) !important",
-  },
-  secondaryButton: {
-    color: "gray",
-    margin: 10,
-  },
-  typography: {
-    margin: theme.spacing.unit * 2,
-    backgroundColor: "default",
-  },
+const UploadImgCard = styled(Card)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "relative",
+  width: "100%",
+  height: 250,
+  boxShadow: "none",
+  backgroundColor: "transparent",
+  borderColor: "rgba(0, 0, 0, 0.23)",
+}));
 
-  searchRoot: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    width: 400,
-  },
-  searchInput: {
-    marginLeft: 8,
-    flex: 1,
-  },
-  searchIconButton: {
-    padding: 10,
-  },
-  searchDivider: {
-    width: 1,
-    height: 28,
-    margin: 4,
-  },
-  cancleIcon: {
-    position: "absolute",
-    top: 5,
-    right: 5,
-    background: "#000",
-    color: "#fff",
-    borderRadius: "50%",
-    boxShadow:
-      "0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12)",
-  },
+const StyledInput = styled("input")({
+  opacity: 0,
+  position: "absolute",
+  top: 0,
+  bottom: 0,
+  right: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+});
 
-  UploadBtn: {
-    display: "flex",
-    alignItems: "center",
-  },
-  uploadedImg: {
-    objectFit: "contain",
-    maxHeight: "250px",
-  },
+const CardHeaderStyled = styled(CardHeader)({
+  textalign: "center",
+  align: "center",
+  backgroundColor: "white",
+});
+
+const Title = styled(Typography)(({ theme }) => ({
+  color: theme.palette.primary.main,
+  fontWeight: "bold",
+  fontFamily: "Montserrat",
+  align: "center",
+}));
+
+const UploadButton = styled(Fab)(({ theme }) => ({
+  color: "#F8C144",
+  margin: 10,
+  background: "rgba(248, 193, 68, 0.2) !important",
+}));
+
+const SecondaryButton = styled(Button)(({ theme }) => ({
+  color: "gray",
+  margin: 10,
+}));
+
+const CancelIcon = styled(CloseIcon)(({ theme }) => ({
+  position: "absolute",
+  top: 5,
+  right: 5,
+  background: "#000",
+  color: "#fff",
+  borderRadius: "50%",
+  boxShadow:
+    "0px 3px 3px -2px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14), 0px 1px 8px 0px rgba(0,0,0,0.12)",
+}));
+
+const UploadBtnWrapper = styled("label")({
+  display: "flex",
+  alignItems: "center",
+});
+
+const UploadedImg = styled("img")({
+  objectFit: "contain",
+  maxHeight: "250px",
 });
 
 const ImageUploadCard = (props) => {
@@ -148,7 +112,9 @@ const ImageUploadCard = (props) => {
     defaultImg: null,
   });
 
-  /* handlig default image on  update*/
+  const theme = useTheme();
+
+  /* handling default image on update */
   useEffect(() => {
     setState({
       ...state,
@@ -158,9 +124,9 @@ const ImageUploadCard = (props) => {
     });
   }, [props.defaultImg]);
 
-  /* handling image on creating new customer*/
+  /* handling image on creating new customer */
   useEffect(() => {
-    if (props.refresh == true) {
+    if (props.refresh === true) {
       props.setRefreshImgUploadComponent(false);
 
       setState({
@@ -177,9 +143,10 @@ const ImageUploadCard = (props) => {
 
     const reader = new FileReader();
 
-    if (file && file.type.match('image.*')) {
+    if (file && file.type.match("image.*")) {
       reader.readAsDataURL(file);
-    } else return
+    } else return;
+
     reader.onloadend = function (e) {
       setState({
         ...state,
@@ -195,29 +162,25 @@ const ImageUploadCard = (props) => {
   };
 
   const renderInitialState = () => {
-    const { classes, theme } = props;
-    const { value } = state;
-
     return (
       <React.Fragment>
         <CardContent>
           <Grid container justifyContent="center" alignItems="center">
-            <input
+            <StyledInput
               id={props.id}
               accept="image/*"
-              className={classes.input}
               name={props.name}
               multiple
               type="file"
               onChange={handleUploadClick}
             />
 
-            <label className={classes.UploadBtn} htmlFor={props.id}>
-              <Fab component="span" className={classes.button}>
+            <UploadBtnWrapper htmlFor={props.id}>
+              <UploadButton component="span">
                 <AddPhotoAlternateIcon />
-              </Fab>
+              </UploadButton>
               <Typography variant="h6">{props.title}</Typography>
-            </label>
+            </UploadBtnWrapper>
           </Grid>
         </CardContent>
       </React.Fragment>
@@ -225,25 +188,21 @@ const ImageUploadCard = (props) => {
   };
 
   const renderUploadedState = () => {
-    const { classes, theme, previewImg, defaultImg } = props;
-
     return (
       <React.Fragment>
         <CardActionArea style={{ display: "flex", height: "100%" }}>
-          <input
+          <StyledInput
             id={props.id}
             accept="image/*"
-            className={classes.input}
             name={props.name}
             multiple
             type="file"
             onChange={handleUploadClick}
           />
-          <img className={classes.uploadedImg} src={state.imgPreview} alt="" />
-          {/* <CloseIcon
+          <UploadedImg src={state.imgPreview} alt="" />
+          {/* <CancelIcon
             onClick={imageResetHandler}
-            fontSize="default"
-            className={classes.cancleIcon}
+            fontSize="medium"
           /> */}
         </CardActionArea>
       </React.Fragment>
@@ -264,18 +223,16 @@ const ImageUploadCard = (props) => {
     props.getSelectedData(null);
   };
 
-  const { classes, theme } = props;
-
   return (
     <React.Fragment>
-      <div className={classes.root}>
-        <Card className={classes.uploadImgCard}>
-          {(state.mainState == "initial" && renderInitialState()) ||
-            (state.mainState == "uploaded" && renderUploadedState())}
-        </Card>
-      </div>
+      <Root>
+        <UploadImgCard>
+          {(state.mainState === "initial" && renderInitialState()) ||
+            (state.mainState === "uploaded" && renderUploadedState())}
+        </UploadImgCard>
+      </Root>
     </React.Fragment>
   );
 };
 
-export default withStyles(styles, { withTheme: true })(ImageUploadCard);
+export default ImageUploadCard;

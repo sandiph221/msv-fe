@@ -17,7 +17,7 @@ import {
   Container,
 } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
-import React from "react";
+
 import Layout from "../../Components/Layout";
 import PageTitle from "../../Components/PageTitle/PageTitle";
 import SocialButton from "../../Components/SocialButton";

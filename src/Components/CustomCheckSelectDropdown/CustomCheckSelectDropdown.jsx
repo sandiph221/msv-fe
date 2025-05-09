@@ -8,7 +8,7 @@ import {
   MenuItem,
   InputLabel
 } from "@mui/material";
-import React from "react";
+
 import { Styles } from "./Styles";
 
 const useStyles = makeStyles((theme) => Styles(theme));

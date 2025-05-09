@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import React, { useEffect } from "react";
-import FacebookLogin from "react-facebook-login";
+import { LoginSocialFacebook } from "reactjs-social-login";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import facebookImage from "../../assets/images/facebook.png";
@@ -236,8 +236,11 @@ const Login = ({ history }) => {
         signInParams.subdomain_id = `${subdomainID}`;
       }
 
+      // Extract access token from the response
+      const accessToken = response.data.accessToken;
+
       const createResponse = await dispatch(
-        FacebookSignIn(response.accessToken, signInParams)
+        FacebookSignIn(accessToken, signInParams)
       );
       setFacebookLoginLoading(false);
       setErrors({});
@@ -366,44 +369,55 @@ const Login = ({ history }) => {
                   </form>
                 </Grid>
                 <Grid item xs={12}>
-                  {/* This facebook login package will handle the initialization of the FB SDK */}
-                  <FacebookLogin
-                    autoLoad={false}
+                  {/* Using reactjs-social-login instead of react-facebook-login */}
+                  <LoginSocialFacebook
                     appId={process.env.REACT_APP_ID}
-                    version={process.env.REACT_APP_VERSION}
-                    render={(renderProps) => (
+                    fieldsProfile={
+                      "id,first_name,last_name,middle_name,name,name_format,picture,short_name,email"
+                    }
+                    onResolve={facebookLogin}
+                    onReject={(error) => {
+                      console.log({ error });
+                      toast.error("Failed to connect to Facebook");
+                      setFacebookLoginLoading(false);
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#4267B2",
+                        fontSize: 15,
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        opacity:
+                          userFormSubmiting || facebookLoginLoading
+                            ? "0.5"
+                            : "1",
+                        display: "flex",
+                        justifyContent: "center",
+                        paddingTop: 20,
+                        maxWidth: "50%",
+                        margin: "0 auto",
+                      }}
+                      onClick={() =>
+                        !userFormSubmiting &&
+                        !facebookLoginLoading &&
+                        setFacebookLoginLoading(true)
+                      }
+                    >
                       <div
-                        style={{
-                          color: "#4267B2",
-                          fontSize: 15,
-                          fontWeight: "600",
-                          cursor: "pointer",
-                          opacity:
-                            userFormSubmiting || facebookLoginLoading
-                              ? "0.5"
-                              : "1",
-                          display: "flex",
-                          justifyContent: "center",
-                          paddingTop: 20,
-                          maxWidth: "50%",
-                          margin: "0 auto",
-                        }}
-                        onClick={renderProps.onClick}
-                        disabled={userFormSubmiting || facebookLoginLoading}
+                        style={{ display: "flex", justifyContent: "center" }}
                       >
-                        <div
-                          style={{ display: "flex", justifyContent: "center" }}
-                        >
-                          <img style={{ height: 20 }} src={facebookImage} />
-                          <div style={{ paddingLeft: 5, whiteSpace: "nowrap" }}>
-                            Log in with Facebook
-                          </div>
+                        <img
+                          style={{ height: 20 }}
+                          src={facebookImage}
+                          alt="Facebook"
+                        />
+                        <div style={{ paddingLeft: 5, whiteSpace: "nowrap" }}>
+                          Log in with Facebook
                         </div>
                       </div>
-                    )}
-                    callback={facebookLogin}
-                    onFailure={(error) => console.log({ error })}
-                  />
+                    </div>
+                  </LoginSocialFacebook>
                 </Grid>
                 {!subDomain && (
                   <Grid item xs={12}>
@@ -531,9 +545,6 @@ const Login = ({ history }) => {
               <Typography className={classes.footerText}>
                 Terms of Service
               </Typography>
-              {/* <Typography className={classes.footerText}>
-              Privacy | Terms of Services
-              </Typography> */}
             </div>
           </div>
         </Grid>

@@ -10,7 +10,7 @@ import {
   Chip,
   withStyles,
 } from "@mui/material";
-import React from "react";
+
 import AddModalForm from "../AddModalForm/AddModalForm";
 import CheckIcon from '@mui/icons-material/Check';
 

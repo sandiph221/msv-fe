@@ -15,7 +15,7 @@ async function replaceInFiles(dirPath, regexToMatch, stringToReplace) {
 
     if (stats.isDirectory()) {
       await replaceInFiles(fullPath, regexToMatch, stringToReplace);
-    } else if (file.endsWith(".js")) {
+    } else if (file.endsWith(".jsx")) {
       let content = await readFile(fullPath, "utf8");
       if (regexToMatch.test(content)) {
         const newContent = content.replace(regexToMatch, stringToReplace);
@@ -27,12 +27,12 @@ async function replaceInFiles(dirPath, regexToMatch, stringToReplace) {
 }
 
 // Example usage ✨
-const regexToMatch = /^import\s+React\s+from\s+'react'\s*;?\s*$/gm;
+const regexToMatch = /import\s+React\s+from\s+["']react["'];/g;
 const stringToReplace = "";
+
 await replaceInFiles(
   path.join(__dirname, "src"),
   regexToMatch,
   stringToReplace
 );
-
 console.log(`\n✅ Replacement complete! 🚀`);

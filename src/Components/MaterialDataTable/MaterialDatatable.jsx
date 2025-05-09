@@ -1,25 +1,16 @@
-import React from "react";
-import MaterialTable, { MTableBody, MTableToolbar } from "material-table";
+import React, { useState, useEffect, forwardRef } from "react";
+import MaterialTable from "material-table";
 import {
   Avatar,
-  Button,
-  Checkbox,
-  Chip,
-  createTheme,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
-  MuiThemeProvider,
-  Paper,
-  Radio,
   Typography,
+  ThemeProvider,
+  createTheme,
+  CircularProgress,
 } from "@mui/material";
-import { forwardRef } from "react";
 import $ from "jquery";
 
+// Icons
 import AddBox from "@mui/icons-material/AddBox";
 import ArrowDownward from "@mui/icons-material/ArrowDownward";
 import Check from "@mui/icons-material/Check";
@@ -36,16 +27,17 @@ import SaveAlt from "@mui/icons-material/SaveAlt";
 import Search from "@mui/icons-material/Search";
 import ViewColumn from "@mui/icons-material/ViewColumn";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+
+// Redux and utilities
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { deleteAddedProfileList } from "../../store/actions/SocialMediaProfileAction";
 import Alert from "../AlertBox/Alert";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import * as constant from "../../utils/constant";
-import { formatImage, formatNumber } from "utils/functions.js";
-import { withRouter } from "react-router";
-import { withStyles } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
+import { formatImage, formatNumber } from "../../utils/functions.js";
 
+// Define table icons with forwardRef for compatibility
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -70,6 +62,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
+// Theme configuration
 const theme = createTheme({
   typography: {
     fontFamily: ["Poppins", "sans-serif"].join(","),
@@ -81,97 +74,271 @@ const theme = createTheme({
   },
 });
 
-const MaterailDataTable = ({
+const MaterialDataTable = ({
   data,
   getSelectedProfileList,
-  history,
   loader,
   selectedLabels,
 }) => {
   const dispatch = useDispatch();
-  const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
-  const [selectedRow, setSelectedRow] = React.useState([]);
-  const [itemToDelete, setItemToDelete] = React.useState(null);
+  const navigate = useNavigate();
+  const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState([]);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
   const { user } = useSelector((state) => state.auth);
-  let [rightClickCount, setRightClickCount] = React.useState(0);
-  let [leftClickCount, setLeftClickCount] = React.useState(0);
-  const { selectedProfilesListToComapre } = useSelector(
+  const { selectedProfilesListToComapre, activeSocialMediaType } = useSelector(
     (state) => state.socialMediaProfileListReducer
   );
 
-  const { activeSocialMediaType } = useSelector(
-    (state) => state.socialMediaProfileListReducer
-  );
+  const subdomain = user.CustomerSubdomain.subdomain;
 
-  let subdomain = user.CustomerSubdomain.subdomain;
-
-  /* deleting added social media profiles dialog opens */
-  const deleteAddedprofile = (data) => {
+  // Handle profile deletion
+  const deleteAddedProfile = (data) => {
     setDeleteAlertOpen(true);
     setItemToDelete(data);
   };
-  /* close modal on clikc */
-  const handleClose = () => {
-    setDeleteAlertOpen(false);
-  };
 
-  /* Deleting social medai profiles list  */
   const handleDelete = () => {
     if (itemToDelete) {
       dispatch(deleteAddedProfileList(itemToDelete.social_page_id));
+      setDeleteAlertOpen(false);
     }
   };
 
-  React.useEffect(() => {
+  // Update selected profiles when selection changes
+  useEffect(() => {
     getSelectedProfileList(selectedRow);
-  }, [selectedRow]);
+  }, [selectedRow, getSelectedProfileList]);
 
-  //For scrolling horizontally
-
-  // $(".scrollRight").click(function(){
-  //   if (rightClickCount === 0){
-  //     $("div").scrollLeft(400);
-  //     setRightClickCount(rightClickCount ++)
-  //   } else  {$("div").scrollLeft(1000); setRightClickCount(0)}
-  // });
-  let left = 0;
-
-  $(".scrollRight").click(function (event) {
+  // Horizontal scrolling handlers
+  const handleScrollRight = (event) => {
     event.preventDefault();
-    left = left + 300;
-    $("div").animate(
-      {
-        scrollLeft: left,
-      },
-      200
-    );
-  });
+    const newPosition = scrollPosition + 300;
+    setScrollPosition(newPosition);
+    $("div").animate({ scrollLeft: newPosition }, 200);
+  };
 
-  $(".scrollLeft").click(function (event) {
+  const handleScrollLeft = (event) => {
     event.preventDefault();
-    if (left > 0) {
-      left = left - 300 < 0 ? 0 : left - 300;
-      $("div").animate(
-        {
-          scrollLeft: left,
-        },
-        200
-      );
+    if (scrollPosition > 0) {
+      const newPosition = Math.max(0, scrollPosition - 300);
+      setScrollPosition(newPosition);
+      $("div").animate({ scrollLeft: newPosition }, 200);
     }
-  });
+  };
 
-  // $(".scrollLeft").click(function(){
-  //   if (leftClickCount === 0){
-  //     $("div").scrollLeft(-200);
-  //     setLeftClickCount(leftClickCount ++)
-  //     setRightClickCount(0)
-  //   } else  $("div").scrollLeft(-400);
-  // });
+  // Navigate to brand overview
+  const navigateToBrandOverview = (id) => {
+    navigate("/brand-overview", { state: id });
+  };
+
+  // Table columns configuration
+  const columns = [
+    {
+      title: "Profile",
+      field: "profileName",
+      render: (rowData) => (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            minWidth: "36vw",
+          }}
+        >
+          {rowData.is_data_downloading && (
+            <div
+              style={{
+                width: 6,
+                height: 30,
+                backgroundColor: "#FBE281",
+                position: "absolute",
+                left: 5,
+              }}
+            />
+          )}
+
+          <Avatar
+            src={formatImage(
+              activeSocialMediaType,
+              subdomain,
+              rowData.page_picture
+            )}
+            style={{ marginRight: "16px", border: "1px solid #E0E0E0" }}
+          />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Typography
+              style={{
+                fontWeight: 600,
+                textTransform: "capitalize",
+                whiteSpace: "break-space",
+                fontSize: 15,
+                cursor: "pointer",
+              }}
+              onClick={() => navigateToBrandOverview(rowData.id)}
+            >
+              {rowData.page_name}
+            </Typography>
+            <Typography
+              style={{
+                textTransform: "capitalize",
+                whiteSpace: "nowrap",
+                fontSize: 13,
+                color: "#757575",
+              }}
+            >
+              {rowData.page_username}
+            </Typography>
+          </div>
+        </div>
+      ),
+      cellStyle: {
+        minwidth: "400px",
+        position: "sticky",
+        zIndex: "500",
+        left: 65,
+        backgroundColor: "#fafafa",
+      },
+      headerStyle: {
+        width: "20vw",
+        position: "sticky",
+        zIndex: "500",
+        left: 65,
+        backgroundColor: "rgb(245, 245, 245)",
+      },
+    },
+    {
+      title: "Total Fans",
+      field: "page_fan_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_fan_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Total Fans"),
+    },
+    {
+      title: "Comment Count",
+      field: "page_comments_count",
+      render: (rowData) => (
+        <div>{formatNumber(rowData.page_comments_count)}</div>
+      ),
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Comment Count"),
+    },
+    {
+      title: "Shares",
+      field: "page_shares_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_shares_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Shares"),
+    },
+    {
+      title: "Post Counts",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Post Counts"),
+    },
+    {
+      title: "Average Interaction per 1k Fans",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find(
+        (label) => label === "Average Interaction per 1k Fans"
+      ),
+    },
+    {
+      title: "Sum of Posts",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Sum of Posts"),
+    },
+    {
+      title: "Sum of likes",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Sum of likes"),
+    },
+    {
+      title: "Average Interaction",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Average Interaction"),
+    },
+    {
+      title: "Number of Organic Post",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find(
+        (label) => label === "Number of Organic Post"
+      ),
+    },
+    {
+      title: "Average response time",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find(
+        (label) => label === "Average response time"
+      ),
+    },
+    {
+      title: "Sum of Page Post",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find((label) => label === "Sum of Page Post"),
+    },
+    {
+      title: "Paid Efficiency Index",
+      field: "page_posts_count",
+      render: (rowData) => <div>{formatNumber(rowData.page_posts_count)}</div>,
+      cellStyle: { width: "5vw" },
+      hidden: !selectedLabels.find(
+        (label) => label === "Paid Efficiency Index"
+      ),
+    },
+    {
+      title: "Delete",
+      field: "",
+      align: "center",
+      render: (rowData) => (
+        <div style={{ minWidth: 140 }}>
+          {user.role !== constant.CUSTOMER_VIEWER_NAME && (
+            <IconButton
+              aria-label="delete"
+              onClick={() => deleteAddedProfile(rowData)}
+            >
+              <RemoveCircleOutlineOutlinedIcon color="error" />
+            </IconButton>
+          )}
+        </div>
+      ),
+      cellStyle: {
+        width: "5vw",
+        position: "sticky",
+        right: 0,
+        zIndex: "500",
+        backgroundColor: "#fafafa",
+      },
+      headerStyle: {
+        position: "sticky",
+        right: 0,
+        zIndex: "500",
+        textAlign: "center",
+      },
+    },
+  ];
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <MaterialTable
-        isLoading={!loader ? false : true}
+        isLoading={loader}
         components={{
           OverlayLoading: (props) => (
             <div
@@ -192,310 +359,12 @@ const MaterailDataTable = ({
           backgroundColor: "transparent",
         }}
         icons={tableIcons}
-        columns={[
-          {
-            title: "Profile",
-            field: "profileName",
-            render: (rowData) => {
-              return (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                    minWidth: "36vw",
-                  }}
-                >
-                  {rowData.is_data_downloading && (
-                    <div
-                      style={{
-                        width: 6,
-                        height: 30,
-                        backgroundColor: "#FBE281",
-                        position: "absolute",
-                        left: 5,
-                      }}
-                    ></div>
-                  )}
-
-                  <Avatar
-                    src={formatImage(
-                      activeSocialMediaType,
-                      subdomain,
-                      rowData.page_picture
-                    )}
-                    style={{ marginRight: "16px", border: "1px solid #E0E0E0" }}
-                  />
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    <Typography
-                      style={{
-                        fontWeight: 600,
-                        textTransform: "capitalize",
-                        whiteSpace: "break-space",
-                        fontSize: 15,
-                        cursor: "pointer",
-                      }}
-                      onClick={() =>
-                        history.push("/brand-overview", rowData.id)
-                      }
-                    >
-                      {rowData.page_name}
-                    </Typography>
-                    <Typography
-                      style={{
-                        textTransform: "capitalize",
-                        whiteSpace: "nowrap",
-                        fontSize: 13,
-                        color: "#757575",
-                      }}
-                    >
-                      {rowData.page_username}
-                    </Typography>
-                  </div>
-                </div>
-              );
-            },
-            cellStyle: {
-              minwidth: "400px",
-              position: "sticky",
-              zIndex: "500",
-              left: 65,
-              backgroundColor: "#fafafa",
-            },
-            headerStyle: {
-              width: "20vw",
-              position: "sticky",
-              zIndex: "500",
-              left: 65,
-              backgroundColor: "rgb(245, 245, 245)",
-            },
-          },
-          {
-            title: "Total Fans",
-            field: "page_fan_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_fan_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find((label) => label === "Total Fans")
-              ? false
-              : true,
-          },
-          {
-            title: "Comment Count",
-            field: "page_comments_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_comments_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find((label) => label === "Comment Count")
-              ? false
-              : true,
-          },
-
-          {
-            title: "Shares",
-            field: "page_shares_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_shares_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find((label) => label === "Shares")
-              ? false
-              : true,
-          },
-          {
-            title: "Post Counts",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find((label) => label === "Post Counts")
-              ? false
-              : true,
-          },
-          {
-            title: "Average Interaction per 1k Fans",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find(
-              (label) => label === "Average Interaction per 1k Fans"
-            )
-              ? false
-              : true,
-          },
-          {
-            title: "Sum of Posts",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find((label) => label === "Sum of Posts")
-              ? false
-              : true,
-          },
-          {
-            title: "Sum of likes",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find((label) => label === "Sum of likes")
-              ? false
-              : true,
-          },
-          {
-            title: "Average Interaction",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find(
-              (label) => label === "Average Interaction"
-            )
-              ? false
-              : true,
-          },
-          {
-            title: "Number of Organic Post",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find(
-              (label) => label === "Number of Organic Post"
-            )
-              ? false
-              : true,
-          },
-          {
-            title: "Average response time",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find(
-              (label) => label === "Average response time"
-            )
-              ? false
-              : true,
-          },
-          {
-            title: "Sum of Page Post",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find((label) => label === "Sum of Page Post")
-              ? false
-              : true,
-          },
-          {
-            title: "Paid Efficiency Index",
-            field: "page_posts_count",
-            render: (rowData) => {
-              return <div>{formatNumber(rowData.page_posts_count)}</div>;
-            },
-            cellStyle: {
-              width: "5vw",
-            },
-            hidden: selectedLabels.find(
-              (label) => label === "Paid Efficiency Index"
-            )
-              ? false
-              : true,
-          },
-          {
-            title: "Delete",
-            field: "",
-            align: "center",
-            render: (rowData) => {
-              return (
-                <div style={{ minWidth: 140 }}>
-                  {user.role !== constant.CUSTOMER_VIEWER_NAME ? (
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => deleteAddedprofile(rowData)}
-                    >
-                      <RemoveCircleOutlineOutlinedIcon color="error" />
-                    </IconButton>
-                  ) : (
-                    ""
-                  )}
-
-                  <Alert
-                    alert={itemToDelete}
-                    icon={
-                      <ErrorOutlineIcon
-                        style={{
-                          fontSize: "5rem",
-                          color: "#f50057",
-                          paddingBottom: 0,
-                        }}
-                      />
-                    }
-                    title="Are you sure?"
-                    confirmBtn="DELETE"
-                    description="You're about to Delete the profile. This process cannot be undone."
-                    open={deleteAlertOpen}
-                    setOpen={setDeleteAlertOpen}
-                    onConfirm={handleDelete}
-                  />
-                </div>
-              );
-            },
-            cellStyle: {
-              width: "5vw",
-              position: "sticky",
-              right: 0,
-              zIndex: "500",
-              backgroundColor: "#fafafa",
-            },
-            headerStyle: {
-              position: "sticky",
-              right: 0,
-              zIndex: "500",
-              textAlign: "center",
-            },
-          },
-        ]}
+        columns={columns}
         data={data}
         options={{
           selection: true,
           selectionProps: (rowData) => ({
-            disabled: selectedProfilesListToComapre.find(
+            disabled: selectedProfilesListToComapre.some(
               (profile) => profile.social_page_id === rowData.social_page_id
             ),
           }),
@@ -504,34 +373,29 @@ const MaterailDataTable = ({
           toolbar: false,
           responsive: true,
           rowStyle: (rowData) => ({
-            // backgroundColor: "#FAFAFA",
-            backgroundColor: selectedRow.find(
-              (row) => row.social_page_id === rowData.social_page_id
-            )
-              ? "#FFF8DE"
-              : "" ||
-                selectedProfilesListToComapre.find(
-                  (profile) => profile.social_page_id === rowData.social_page_id
-                )
-              ? "#FFF8DE"
-              : "",
+            backgroundColor:
+              selectedRow.some(
+                (row) => row.social_page_id === rowData.social_page_id
+              ) ||
+              selectedProfilesListToComapre.some(
+                (profile) => profile.social_page_id === rowData.social_page_id
+              )
+                ? "#FFF8DE"
+                : "",
           }),
           headerStyle: {
             backgroundColor: "#F5F5F5",
             borderRadius: "4px",
           },
-          // fixedColumns: {
-          //   left: 1,
-          //   right: 1
-          // },
         }}
         onSelectionChange={(rows) => setSelectedRow(rows)}
         localization={{
           body: {
-            emptyDataSourceMessage: "no records found",
+            emptyDataSourceMessage: "No records found",
           },
         }}
       />
+
       <div
         style={{
           display: "flex",
@@ -539,11 +403,35 @@ const MaterailDataTable = ({
           marginTop: 10,
         }}
       >
-        <button className="scrollLeft">Scroll</button>
-        <button className="scrollRight">Scroll</button>
+        <button className="scrollLeft" onClick={handleScrollLeft}>
+          Scroll Left
+        </button>
+        <button className="scrollRight" onClick={handleScrollRight}>
+          Scroll Right
+        </button>
       </div>
-    </MuiThemeProvider>
+
+      {/* Alert Dialog for Delete Confirmation */}
+      <Alert
+        alert={itemToDelete}
+        icon={
+          <ErrorOutlineIcon
+            style={{
+              fontSize: "5rem",
+              color: "#f50057",
+              paddingBottom: 0,
+            }}
+          />
+        }
+        title="Are you sure?"
+        confirmBtn="DELETE"
+        description="You're about to Delete the profile. This process cannot be undone."
+        open={deleteAlertOpen}
+        setOpen={setDeleteAlertOpen}
+        onConfirm={handleDelete}
+      />
+    </ThemeProvider>
   );
 };
 
-export default withRouter(MaterailDataTable);
+export default MaterialDataTable;

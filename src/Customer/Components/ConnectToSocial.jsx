@@ -2,53 +2,42 @@ import React, { useEffect, useState } from "react";
 import styles from "./Styles";
 import { useDispatch } from "react-redux";
 import Spinner from "../../Components/Spinner";
+import { LoginSocialFacebook } from "reactjs-social-login";
 
 import {
   Box,
   Button,
-  Container,
   MenuItem,
   Select,
   Tooltip,
   Typography,
   makeStyles,
-  useTheme,
   withStyles,
 } from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
 import { linkSocialPlatform } from "store/actions/CustomersAction";
 import { toast } from "react-toastify";
 import axios from "axios";
-import FacebookLogin from "react-facebook-login";
 
 const ConnectToSocial = () => {
   const useStyles = makeStyles((theme) => styles(theme));
   const classes = useStyles();
-  // const { accessToken } = useSelector((state) => state.social);
   const dispatch = useDispatch();
 
   const [platformData, setPlatFormData] = useState("");
-
-  // const [platformData, setPlatFormData] = useState({});
   const [account, setAccount] = useState("");
   const [linkingFacebook, setLinkingFacebook] = useState(true);
 
   /**
-   *
-   * @param {{access_token: string,
-   * name: string,
-   * id: string,
-   * userID: string,
-   * expiresIn: number,
-   * accessToken: string,
-   * signedRequest: string,
-   * graphDomain: string,
-   * data_access_expiration_time: number
-   * }} authResponse
+   * Handle successful social login
+   * @param {Object} response - The response from social login
    */
-  const handleLinkSocial = async (authResponse) => {
+  const handleLinkSocial = async (response) => {
     try {
-      await dispatch(linkSocialPlatform(authResponse.accessToken));
+      // Extract the access token from the response
+      const accessToken = response.data.accessToken;
+
+      await dispatch(linkSocialPlatform(accessToken));
       await getIntegratedData("facebook");
       toast.success("Account linked successfully");
       setLinkingFacebook(false);
@@ -149,34 +138,31 @@ const ConnectToSocial = () => {
           </StyledButton>
         </div>
       ) : (
-        <FacebookLogin
-          autoLoad={false}
+        <LoginSocialFacebook
           appId={process.env.REACT_APP_ID}
-          version={process.env.REACT_APP_VERSION}
+          fieldsProfile={
+            "id,first_name,last_name,middle_name,name,name_format,picture,short_name,email"
+          }
           scope="pages_show_list,business_management,instagram_basic,instagram_manage_insights,pages_read_engagement,email"
-          render={(renderProps) => (
-            <StyledButton
-              disabled={linkingFacebook}
-              onClick={(e) => {
-                setLinkingFacebook(true);
-                renderProps.onClick(e);
-              }}
-            >
-              {linkingFacebook && (
-                <div className={classes.relative}>
-                  <Spinner />
-                </div>
-              )}
-              Connect Facebook™
-            </StyledButton>
-          )}
-          callback={handleLinkSocial}
-          onFailure={(error) => {
+          onResolve={handleLinkSocial}
+          onReject={(error) => {
             console.log({ error });
             toast.error("Failed to connect to Facebook");
             setLinkingFacebook(false);
           }}
-        />
+        >
+          <StyledButton
+            disabled={linkingFacebook}
+            onClick={() => setLinkingFacebook(true)}
+          >
+            {linkingFacebook && (
+              <div className={classes.relative}>
+                <Spinner />
+              </div>
+            )}
+            Connect Facebook™
+          </StyledButton>
+        </LoginSocialFacebook>
       )}
     </Box>
   );

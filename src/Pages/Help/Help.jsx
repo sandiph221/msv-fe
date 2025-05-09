@@ -1,9 +1,7 @@
 import {
   Grid,
-  makeStyles,
   TextField,
   Typography,
-  withStyles,
   InputAdornment,
   Avatar,
   ListItem,
@@ -17,10 +15,13 @@ import {
   MenuItem,
   Card,
   CardActions,
+  styled,
+  FormHelperText,
+  Container,
+  CardContent,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../Components/Layout";
-import styles from "./Styles";
 import SearchIcon from "@mui/icons-material/Search";
 import HelpSectionList from "../../Components/HelpSectionList/HelpSectionList";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -46,62 +47,93 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import CreateIcon from "@mui/icons-material/Create";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Container } from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
 import Spinner from "../../Components/Spinner";
 import InfoIcon from "@mui/icons-material/Info";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { HelpPageArticle } from "../../Components/HelpPageArticle/HelpPageArticle";
-import { withRouter } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { HelpPageBannerSection } from "../../Components/HelpPageBannerSection/HelpPageBannerSection";
 import parse from "html-react-parser";
-import { CardContent } from "@mui/material";
 import { deleteConfirmation } from "../../utils/functions";
 
-/* styled component starts */
-const StyledTextField = withStyles({
-  root: {
-    color: "#000",
-    marginTop: constant.SUPER_ADMIN_NAME ? 0 : 20,
-    marginBottom: constant.SUPER_ADMIN_NAME ? 0 : 20,
-    width: constant.SUPER_ADMIN_NAME ? "100%" : 520,
-    height: 65,
-    "& .MuiOutlinedInput-root": {
-      "& input": {
-        zIndex: 9999,
-      },
-      "& fieldset": {
-        borderRadius: 12,
-        backgroundColor: (props) =>
-          props.backgroundColor ? "#fff" : "transparent",
-      },
+/* styled components */
+const StyledTextField = styled(TextField)(({ backgroundColor }) => ({
+  color: "#000",
+  marginTop: constant.SUPER_ADMIN_NAME ? 0 : 20,
+  marginBottom: constant.SUPER_ADMIN_NAME ? 0 : 20,
+  width: constant.SUPER_ADMIN_NAME ? "100%" : 520,
+  height: 65,
+  "& .MuiOutlinedInput-root": {
+    "& input": {
+      zIndex: 9999,
+    },
+    "& fieldset": {
+      borderRadius: 12,
+      backgroundColor: backgroundColor ? "#fff" : "transparent",
     },
   },
-})(TextField);
+}));
 
-const StyledTextFieldForm = withStyles({
-  root: {
-    width: "100%",
-    borderRadius: 15,
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderRadius: 12,
-      },
+const StyledTextFieldForm = styled(TextField)({
+  width: "100%",
+  borderRadius: 15,
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderRadius: 12,
     },
   },
-})(TextField);
+});
 
-const StyledAccordion = withStyles({
-  root: {
-    width: "100%",
-  },
-})(Accordion);
+const StyledAccordion = styled(Accordion)({
+  width: "100%",
+});
 
-const useStyles = makeStyles((theme) => styles(theme));
+// Styled components for the rest of the styles
+const Row = styled(Grid)({
+  // Add styles from classes.row if needed
+});
 
-const Help = ({ history }) => {
-  const classes = useStyles();
+const Sidebar = styled(Grid)(({ theme }) => ({
+  // Add styles from classes.sidebar if needed
+}));
+
+const AsideTop = styled("div")(({ theme }) => ({
+  // Add styles from classes.asideTop if needed
+}));
+
+const UserContainer = styled("div")(({ theme }) => ({
+  // Add styles from classes.userContainer if needed
+}));
+
+const UserType = styled(Typography)(({ theme }) => ({
+  // Add styles from classes.userType if needed
+}));
+
+const FormContainer = styled(Grid)(({ theme }) => ({
+  // Add styles from classes.formContainer if needed
+}));
+
+const ArticleCard = styled(Card)(({ theme }) => ({
+  // Add styles from classes.articleCard if needed
+}));
+
+const HelpList = styled("div")(({ theme }) => ({
+  // Add styles from classes.helpList if needed
+}));
+
+const HelpIconList = styled("div")(({ theme }) => ({
+  // Add styles from classes.helpIconList if needed
+}));
+
+const ImgError = styled(Typography)(({ theme }) => ({
+  // Add styles from classes.imgError if needed
+}));
+
+const Help = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const editor = useRef(null);
   const [content, setContent] = useState("");
@@ -299,7 +331,7 @@ const Help = ({ history }) => {
 
   return (
     <Layout>
-      <Grid className={classes.row} container>
+      <Row container>
         {user && user.role !== constant.SUPER_ADMIN_NAME ? (
           <div
             style={{
@@ -311,62 +343,44 @@ const Help = ({ history }) => {
           >
             <HelpPageBannerSection
               searchQuery={searchQuery}
-              handleKeyPress={() => history.push("/help/faq")}
+              handleKeyPress={() => navigate("/help/faq")}
               handleSearch={handleSearch}
             />
-            <Container style={{ marginTop: 100, marginBottom: 60 }}>
+            <Container sx={{ marginTop: 100, marginBottom: 60 }}>
               {/* <HelpSectionList sectionList={sectionList}/> */}
               <Grid container spacing={2}>
-                <Grid item sm={12} md={6} style={{ width: "100%" }}>
-                  <div
-                    className={classes.helpList}
-                    onClick={() => history.push("/help/faq")}
-                  >
+                <Grid item sm={12} md={6} sx={{ width: "100%" }}>
+                  <HelpList onClick={() => navigate("/help/faq")}>
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <div
-                        className={classes.helpIconList}
-                        style={{ backgroundColor: "#ff91571a" }}
-                      >
-                        <HelpIcon style={{ color: "#ff9157", fontSize: 21 }} />
-                      </div>
+                      <HelpIconList sx={{ backgroundColor: "#ff91571a" }}>
+                        <HelpIcon sx={{ color: "#ff9157", fontSize: 21 }} />
+                      </HelpIconList>
                       <p> FAQs </p>
                     </div>
-                  </div>
+                  </HelpList>
                 </Grid>
-                <Grid item sm={12} md={6} style={{ width: "100%" }}>
-                  <div
-                    className={classes.helpList}
-                    onClick={() => history.push("/help/how-to-document")}
-                  >
+                <Grid item sm={12} md={6} sx={{ width: "100%" }}>
+                  <HelpList onClick={() => navigate("/help/how-to-document")}>
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <div
-                        className={classes.helpIconList}
-                        style={{ backgroundColor: "#19a96e1a" }}
-                      >
-                        <InfoIcon style={{ color: "#19a96e" }} />
-                      </div>
+                      <HelpIconList sx={{ backgroundColor: "#19a96e1a" }}>
+                        <InfoIcon sx={{ color: "#19a96e" }} />
+                      </HelpIconList>
                       <p> How to Documents? </p>
                     </div>
-                  </div>
+                  </HelpList>
                 </Grid>
-                <Grid item sm={12} md={6} style={{ width: "100%" }}>
+                <Grid item sm={12} md={6} sx={{ width: "100%" }}>
                   <AddModalForm />
                 </Grid>
-                <Grid item sm={12} md={6} style={{ width: "100%" }}>
-                  <div
-                    className={classes.helpList}
-                    onClick={() => history.push("/help/videos")}
-                  >
+                <Grid item sm={12} md={6} sx={{ width: "100%" }}>
+                  <HelpList onClick={() => navigate("/help/videos")}>
                     <div style={{ display: "flex", alignItems: "center" }}>
-                      <div
-                        className={classes.helpIconList}
-                        style={{ backgroundColor: "#ff00001a" }}
-                      >
-                        <YouTubeIcon style={{ color: "#ff0000" }} />
-                      </div>
+                      <HelpIconList sx={{ backgroundColor: "#ff00001a" }}>
+                        <YouTubeIcon sx={{ color: "#ff0000" }} />
+                      </HelpIconList>
                       <p> Help videos </p>
                     </div>
-                  </div>
+                  </HelpList>
                 </Grid>
               </Grid>
             </Container>
@@ -375,29 +389,28 @@ const Help = ({ history }) => {
           <div>
             <Grid container>
               <Grid xl={3} lg={4} md={5} sm={12} xs={12} item>
-                <Grid className={classes.sidebar}>
-                  <div className={classes.asideTop}>
-                    <div className={classes.userContainer}>
-                      <Typography className={classes.userType}>
+                <Sidebar>
+                  <AsideTop>
+                    <UserContainer>
+                      <UserType>
                         <strong>Help Center</strong>
-                      </Typography>
+                      </UserType>
                       {/* <AddModalForm /> */}
-                    </div>
+                    </UserContainer>
                     <StyledTextField
                       fullWidth
-                      className={classes.textField}
                       hinttext="Search by Name"
                       variant="outlined"
                       placeholder="Search"
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
-                            <SearchIcon style={{ color: "#323132" }} />
+                            <SearchIcon sx={{ color: "#323132" }} />
                           </InputAdornment>
                         ),
                       }}
                     />
-                  </div>
+                  </AsideTop>
                   <List>
                     {article && article.section === "faq" ? (
                       faqListLoader ? (
@@ -405,17 +418,17 @@ const Help = ({ history }) => {
                       ) : faqList ? (
                         faqList.map((item, index) => (
                           <ListItem key={index}>
-                            <Card className={classes.articleCard}>
+                            <ArticleCard>
                               <CardContent>
                                 <Typography> {item.title} </Typography>
                               </CardContent>
                               <CardActions>
                                 <CreateIcon
-                                  style={{ cursor: "pointer" }}
+                                  sx={{ cursor: "pointer" }}
                                   onClick={() => setEditInfo(item)}
                                 />
                               </CardActions>
-                            </Card>
+                            </ArticleCard>
                           </ListItem>
                         ))
                       ) : (
@@ -427,17 +440,17 @@ const Help = ({ history }) => {
                       ) : howToDocList ? (
                         howToDocList.map((item, index) => (
                           <ListItem key={index}>
-                            <Card className={classes.articleCard}>
+                            <ArticleCard>
                               <CardContent>
                                 <Typography> {item.title} </Typography>
                               </CardContent>
                               <CardActions>
                                 <CreateIcon
-                                  style={{ cursor: "pointer" }}
+                                  sx={{ cursor: "pointer" }}
                                   onClick={() => setEditInfo(item)}
                                 />
                               </CardActions>
-                            </Card>
+                            </ArticleCard>
                           </ListItem>
                         ))
                       ) : (
@@ -449,17 +462,17 @@ const Help = ({ history }) => {
                       ) : videoList ? (
                         videoList.map((item, index) => (
                           <ListItem key={index}>
-                            <Card className={classes.articleCard}>
+                            <ArticleCard>
                               <CardContent>
                                 <Typography> {item.title} </Typography>
                               </CardContent>
                               <CardActions>
                                 <CreateIcon
-                                  style={{ cursor: "pointer" }}
+                                  sx={{ cursor: "pointer" }}
                                   onClick={() => setEditInfo(item)}
                                 />
                               </CardActions>
-                            </Card>
+                            </ArticleCard>
                           </ListItem>
                         ))
                       ) : (
@@ -473,10 +486,9 @@ const Help = ({ history }) => {
                       {/* getCustomersLoading && <div className={classes.userItem}></div> */}
                     </ListItem>
                   </List>
-                </Grid>
+                </Sidebar>
               </Grid>
-              <Grid
-                className={classes.formContainer}
+              <FormContainer
                 xl={9}
                 lg={8}
                 md={7}
@@ -486,16 +498,16 @@ const Help = ({ history }) => {
                 spacing={2}
               >
                 {Object.keys(editInfo).length === 0 ? (
-                  <Typography className={classes.userType}>
+                  <UserType>
                     <strong>New Article</strong>
-                  </Typography>
+                  </UserType>
                 ) : (
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <Typography className={classes.userType}>
+                    <UserType>
                       <strong>Update Article</strong>
-                    </Typography>
+                    </UserType>
                     <Buttons
                       onClick={() =>
                         deleteConfirmation(
@@ -507,7 +519,7 @@ const Help = ({ history }) => {
                           }
                         })
                       }
-                      style={{
+                      sx={{
                         backgroundColor: "#F44336",
                         borderColor: "#F44336",
                         color: "#fff",
@@ -515,24 +527,6 @@ const Help = ({ history }) => {
                     >
                       Delete Article
                     </Buttons>
-                    {/* <Alert
-                  alert={itemToDelete}
-                  icon={
-                    <ErrorOutlineIcon
-                      style={{
-                        fontSize: "5rem",
-                        color: "#f50057",
-                        paddingBottom: 0,
-                      }}
-                    />
-                  }
-                  title="Are you sure?"
-                  confirmBtn="DELETE"
-                  description="You're about to Delete the profile. This process cannot be undone."
-                  open={deleteAlertOpen}
-                  setOpen={setDeleteAlertOpen}
-                  onConfirm={handleDelete}
-                /> */}
                   </div>
                 )}
 
@@ -540,9 +534,9 @@ const Help = ({ history }) => {
                   {" "}
                   <Grid container spacing={3}>
                     <Grid item xs={12}>
-                      <FormControl style={{ width: "100%" }} variant="outlined">
+                      <FormControl sx={{ width: "100%" }} variant="outlined">
                         <Select
-                          style={{
+                          sx={{
                             width: "100%",
                             borderRadius: 12,
                             color: "rgba(0, 0, 0, 0.5)",
@@ -565,15 +559,15 @@ const Help = ({ history }) => {
                           </MenuItem>
                           <MenuItem value="videos">Video</MenuItem>
                         </Select>
-                        {/* {errors.role ? 
-                          <FormHelperText className={classes.errorHelperText}>User Role is Required</FormHelperText>
-                        : ''
-                        } */}
+                        {errors.section && (
+                          <FormHelperText error>
+                            Field is Required
+                          </FormHelperText>
+                        )}
                       </FormControl>
                     </Grid>
                     <Grid item xs={12}>
                       <StyledTextFieldForm
-                        className={classes.inputField}
                         type="text"
                         id="title"
                         label="Title*"
@@ -601,16 +595,13 @@ const Help = ({ history }) => {
                         } // preferred to use only this option to update the content for performance reasons
                         onChange={(newContent) => {}}
                       />
-                      <Typography className={classes.imgError}>
-                        {" "}
-                        {errors && errors.body}{" "}
-                      </Typography>
+                      {errors.body && <ImgError>{errors.body}</ImgError>}
                     </Grid>
                     <Grid item xs={12}>
                       {Object.keys(editInfo).length !== 0 && (
                         <Buttons
                           onClick={handleCancel}
-                          style={{
+                          sx={{
                             backgroundColor: "#49fcea",
                             borderColor: "#49fcea",
                             marginRight: 30,
@@ -628,12 +619,13 @@ const Help = ({ history }) => {
                     </Grid>
                   </Grid>
                 </form>
-              </Grid>
+              </FormContainer>
             </Grid>
           </div>
         )}
-      </Grid>
+      </Row>
     </Layout>
   );
 };
-export default withRouter(Help);
+
+export default Help;

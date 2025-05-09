@@ -1,4 +1,4 @@
-import React from "react";
+
 import Layout from "../../Components/Layout";
 import "./style.css";
 import profile from "./img/profile.jpg";

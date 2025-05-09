@@ -1,12 +1,17 @@
-import { createStore, applyMiddleware } from "redux";
+// store.js
+import { configureStore } from "@reduxjs/toolkit";
+import { reducers } from "./reducers"; // Can be combined reducers or slice reducers
 import thunk from "redux-thunk";
-import Axios from "axios";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { reducers } from "./reducers";
-import logger from 'redux-logger'
+import logger from "redux-logger";
 
-const middleware = [thunk, logger];
-export default createStore(
-  reducers,
-  composeWithDevTools(applyMiddleware(...middleware))
-);
+const store = configureStore({
+  reducer: reducers, // object of slices or combined reducer
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: true,
+      serializableCheck: false, // optional: disable warnings
+    }).concat(logger), // add custom middleware like logger
+  devTools: process.env.NODE_ENV !== "production", // enables Redux DevTools
+});
+
+export default store;

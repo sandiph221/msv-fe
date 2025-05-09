@@ -9,7 +9,7 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
-import React from "react";
+
 import { formatImage } from "utils/functions.js";
 import { Styles } from "./Styles";
 

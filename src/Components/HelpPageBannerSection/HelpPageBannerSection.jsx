@@ -6,7 +6,7 @@ import {
   TextField,
   InputAdornment,
 } from '@mui/material';
-import React from 'react';
+
 import * as constant from '../../utils/constant';
 import SearchIcon from '@mui/icons-material/Search';
 

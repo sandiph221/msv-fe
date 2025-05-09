@@ -1,5 +1,5 @@
 import { Box, Button, Container, Typography, useTheme } from "@mui/material";
-import React from "react";
+
 import { useMediaQuery } from "@mui/material";
 import { formatImage } from "utils/functions.js";
 import { useSelector } from "react-redux";

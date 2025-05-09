@@ -1,20 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { Snackbar, Alert as MuiAlert } from "@mui/material";
 
 export default function ClearToast() {
   const dispatch = useDispatch();
-
   const { open, message, variant } = useSelector((state) => state.toast);
 
   function handleClose() {
     dispatch({
       type: "ClearToast",
     });
-  }
-
-  function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
   return (
@@ -28,9 +22,15 @@ export default function ClearToast() {
       onClose={handleClose}
       aria-describedby="client-snackbar"
     >
-      <Alert onClose={handleClose} severity={variant}>
+      <MuiAlert
+        elevation={6}
+        variant="filled"
+        onClose={handleClose}
+        severity={variant}
+        sx={{ width: "100%" }}
+      >
         {message}
-      </Alert>
+      </MuiAlert>
     </Snackbar>
   );
 }

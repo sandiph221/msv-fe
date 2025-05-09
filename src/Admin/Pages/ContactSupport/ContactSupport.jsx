@@ -1,5 +1,5 @@
 import { Container, Grid, makeStyles, Typography } from "@mui/material";
-import React from "react";
+
 import { CustomerSupportCard } from "../../../Components/CustomerSupportCard/CustomerSupportCard";
 import Layout from "../../../Components/Layout";
 import Styles from "./Styles";

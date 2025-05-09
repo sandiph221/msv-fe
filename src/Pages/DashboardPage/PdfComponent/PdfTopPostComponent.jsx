@@ -1,6 +1,6 @@
 import { Image, Text, View, Link, StyleSheet, Font } from "@react-pdf/renderer";
 import { formatImage, numbersFormat } from "utils/functions.js";
-import React from "react";
+
 import fbLogo from "../../../assets/images/facebook.png";
 import InstagramLogo from "../../../assets/images/instagram.png";
 import cameraIcon from "../../../assets/images/cameraIcon.png";

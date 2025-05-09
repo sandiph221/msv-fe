@@ -1,76 +1,103 @@
-import { Grid, makeStyles, MenuItem, Paper, Select, Typography, useTheme } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import Styles from './Styles';
-import Layout from 'Components/Layout';
-import axios from 'axios';
+import {
+  Grid,
+  Paper,
+  MenuItem,
+  Select,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import Layout from "Components/Layout";
+import axios from "axios";
 
-const useStyles = makeStyles((theme) => ({
-  ...Styles(theme),
-  container: {
-    padding: '32px 50px',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-    gap: 24,
-    marginBottom: 32,
-  },
-  statCard: {
-    padding: 24,
-    borderRadius: 8,
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid rgba(0, 0, 0, 0.23)",
-    boxShadow: "none",
-    '&:hover $statValue': {
-      color: "#f4d45f",
-    },
-  },
-  chartContainer: {
-    marginBottom: 32,
-    padding: 24,
-    borderRadius: 8,
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid rgba(0, 0, 0, 0.23)",
-    boxShadow: "none",
-  },
-  chartHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  roleFilter: {
-    minWidth: 150,
-    height: 40,
-  },
-  chartWrapper: {
-    width: '100%',
-    height: 400,
-  },
-  statValue: {
-    fontSize: 32,
-    fontWeight: 600,
-    marginBottom: 8,
-    color: "#FBE281",
-  },
-  statLabel: {
-    color: theme.palette.text.secondary,
-  }
+// Styled components using MUI's styled API
+const Container = styled("div")(({ theme }) => ({
+  padding: "32px 50px",
 }));
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const Header = styled("div")({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: 24,
+});
+
+const StatsGrid = styled("div")({
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+  gap: 24,
+  marginBottom: 32,
+});
+
+const StatCard = styled(Paper)(({ theme }) => ({
+  padding: 24,
+  borderRadius: 8,
+  backgroundColor: theme.palette.background.paper,
+  border: "1px solid rgba(0, 0, 0, 0.23)",
+  boxShadow: "none",
+  "&:hover .statValue": {
+    color: "#f4d45f",
+  },
+}));
+
+const ChartContainer = styled(Paper)(({ theme }) => ({
+  marginBottom: 32,
+  padding: 24,
+  borderRadius: 8,
+  backgroundColor: theme.palette.background.paper,
+  border: "1px solid rgba(0, 0, 0, 0.23)",
+  boxShadow: "none",
+}));
+
+const ChartHeader = styled("div")({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: 16,
+});
+
+const RoleFilter = styled(Select)({
+  minWidth: 150,
+  height: 40,
+});
+
+const ChartWrapper = styled("div")({
+  width: "100%",
+  height: 400,
+});
+
+const StatValue = styled(Typography)({
+  fontSize: 32,
+  fontWeight: 600,
+  marginBottom: 8,
+  color: "#FBE281",
+});
+
+const StatLabel = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+}));
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 function Analytics() {
   const theme = useTheme();
-  const classes = useStyles(theme);
-  const [selectedRole, setSelectedRole] = useState('super-admin');
+  const [selectedRole, setSelectedRole] = useState("super-admin");
   const [userStats, setUserStats] = useState([]);
   const [subscriptionStats, setSubscriptionStats] = useState([]);
 
@@ -79,22 +106,22 @@ function Analytics() {
     const fetchUserAnalytics = async () => {
       try {
         const data = await axios.get(
-          `/stats/user${selectedRole !== 'all' ? `?role=${selectedRole}` : ''}`
+          `/stats/user${selectedRole !== "all" ? `?role=${selectedRole}` : ""}`
         );
-        console.log(data.data)
+        console.log(data.data);
         setUserStats(data.data.data);
       } catch (error) {
-        console.error('Error fetching user analytics:', error);
+        console.error("Error fetching user analytics:", error);
       }
     };
 
     // Fetch subscription analytics
     const fetchSubscriptionAnalytics = async () => {
       try {
-        const data = await axios.get('/stats/subscriptions');
+        const data = await axios.get("/stats/subscriptions");
         setSubscriptionStats(data.data.data);
       } catch (error) {
-        console.error('Error fetching subscription analytics:', error);
+        console.error("Error fetching subscription analytics:", error);
       }
     };
 
@@ -103,52 +130,55 @@ function Analytics() {
   }, [selectedRole]);
 
   const totalUsers = userStats.reduce((acc, curr) => acc + curr.count, 0);
-  const totalSubscriptions = subscriptionStats.subscriptions?.reduce((acc, curr) => acc + curr.count, 0) ?? 0;
+  const totalSubscriptions =
+    subscriptionStats.subscriptions?.reduce(
+      (acc, curr) => acc + curr.count,
+      0
+    ) ?? 0;
   const totalRevenue = subscriptionStats.revenue;
 
   return (
     <Layout>
-      <div className={classes.container} style={{marginTop: 72}}>
-        <div className={classes.header}>
-          <Typography variant="h5" style={{ fontWeight: 600 }}>
+      <Container style={{ marginTop: 72 }}>
+        <Header>
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
             Analytics Dashboard
           </Typography>
-        </div>
+        </Header>
 
         {/* Stats Cards */}
-        <div className={classes.statsGrid}>
-          <Paper className={classes.statCard}>
-            <Typography className={classes.statValue}>{totalUsers}</Typography>
-            <Typography className={classes.statLabel}>Total Users</Typography>
-          </Paper>
-          <Paper className={classes.statCard}>
-            <Typography className={classes.statValue}>{totalSubscriptions}</Typography>
-            <Typography className={classes.statLabel}>Active Subscriptions</Typography>
-          </Paper>
-          <Paper className={classes.statCard}>
-            <Typography className={classes.statValue}>${totalRevenue}</Typography>
-            <Typography className={classes.statLabel}>Total Revenue</Typography>
-          </Paper>
-        </div>
+        <StatsGrid>
+          <StatCard>
+            <StatValue className="statValue">{totalUsers}</StatValue>
+            <StatLabel>Total Users</StatLabel>
+          </StatCard>
+          <StatCard>
+            <StatValue className="statValue">{totalSubscriptions}</StatValue>
+            <StatLabel>Active Subscriptions</StatLabel>
+          </StatCard>
+          <StatCard>
+            <StatValue className="statValue">${totalRevenue}</StatValue>
+            <StatLabel>Total Revenue</StatLabel>
+          </StatCard>
+        </StatsGrid>
 
         {/* User Analytics */}
-        <Paper className={classes.chartContainer}>
-          <div className={classes.chartHeader}>
+        <ChartContainer>
+          <ChartHeader>
             <Typography variant="h6">User Growth</Typography>
-            <Select
+            <RoleFilter
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
               variant="outlined"
               size="small"
-              className={classes.roleFilter}
             >
               <MenuItem value="all">All Roles</MenuItem>
               <MenuItem value="super-admin">Super Admin</MenuItem>
               <MenuItem value="customer-admin">Customer Admin</MenuItem>
               <MenuItem value="customer-viewer">Customer Viewer</MenuItem>
-            </Select>
-          </div>
-          <div className={classes.chartWrapper}>
+            </RoleFilter>
+          </ChartHeader>
+          <ChartWrapper>
             <ResponsiveContainer>
               <LineChart data={userStats}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -159,20 +189,20 @@ function Analytics() {
                 <Line
                   type="monotone"
                   dataKey="count"
-                  stroke={'#FBE281'}
+                  stroke={"#FBE281"}
                   name="Users"
                 />
               </LineChart>
             </ResponsiveContainer>
-          </div>
-        </Paper>
+          </ChartWrapper>
+        </ChartContainer>
 
         {/* Subscription Analytics */}
-        <Paper className={classes.chartContainer}>
+        <ChartContainer>
           <Typography variant="h6" gutterBottom>
             Subscription Distribution
           </Typography>
-          <div className={classes.chartWrapper}>
+          <ChartWrapper>
             <ResponsiveContainer>
               <BarChart data={subscriptionStats}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -180,16 +210,12 @@ function Analytics() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar
-                  dataKey="count"
-                  fill={'#FBE281'}
-                  name="Subscriptions"
-                />
+                <Bar dataKey="count" fill={"#FBE281"} name="Subscriptions" />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-        </Paper>
-      </div>
+          </ChartWrapper>
+        </ChartContainer>
+      </Container>
     </Layout>
   );
 }
