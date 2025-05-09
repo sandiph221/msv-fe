@@ -11,7 +11,7 @@ import {
   withStyles,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { LoginSocialFacebook } from "reactjs-social-login";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";

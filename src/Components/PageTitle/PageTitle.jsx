@@ -1,16 +1,14 @@
-import { Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import fbIcon from "../../assets/images/facebook.png";
 import instaBg from "../../assets/images/instabg.png";
-import React from 'react'
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 const PageTitle = ({ title, subTitle }) => {
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
-  const {
-    activeSocialMediaType,
-
-  } = useSelector((state) => state.socialMediaProfileListReducer);
+  const { activeSocialMediaType } = useSelector(
+    (state) => state.socialMediaProfileListReducer
+  );
 
   return (
     <div
@@ -20,7 +18,7 @@ const PageTitle = ({ title, subTitle }) => {
         alignItems: "center",
         marginBottom: 40,
         marginTop: 30,
-        width: "100%"
+        width: "100%",
       }}
     >
       <img
@@ -36,8 +34,8 @@ const PageTitle = ({ title, subTitle }) => {
           activeSocialMediaType === "instagram"
             ? instaBg
             : activeSocialMediaType === "facebook"
-              ? fbIcon
-              : ""
+            ? fbIcon
+            : ""
         }
       />
       <Typography
@@ -48,11 +46,12 @@ const PageTitle = ({ title, subTitle }) => {
           textTransform: "capitalize",
         }}
       >
-        {title ? `${title}` : `${activeSocialMediaType} ${subTitle ? subTitle : "Overview"}`}
-
+        {title
+          ? `${title}`
+          : `${activeSocialMediaType} ${subTitle ? subTitle : "Overview"}`}
       </Typography>
     </div>
-  )
-}
+  );
+};
 
-export default PageTitle
+export default PageTitle;

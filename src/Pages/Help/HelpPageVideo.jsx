@@ -1,5 +1,5 @@
 import { Container, Grid, makeStyles } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { HelpPageBannerSection } from "../../Components/HelpPageBannerSection/HelpPageBannerSection";
 import Layout from "../../Components/Layout/index";
 import Styles from "./Styles";

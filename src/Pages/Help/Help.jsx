@@ -20,7 +20,7 @@ import {
   Container,
   CardContent,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layout from "../../Components/Layout";
 import SearchIcon from "@mui/icons-material/Search";
 import HelpSectionList from "../../Components/HelpSectionList/HelpSectionList";
@@ -95,9 +95,8 @@ const Row = styled(Grid)({
   // Add styles from classes.row if needed
 });
 
-const Sidebar = styled(Grid)(({ theme }) => ({
-  // Add styles from classes.sidebar if needed
-}));
+// const Sidebar = styled(Grid)(({ theme }) => ({
+// }));
 
 const AsideTop = styled("div")(({ theme }) => ({
   // Add styles from classes.asideTop if needed

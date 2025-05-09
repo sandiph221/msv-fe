@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import JoditEditor from 'jodit-react';
+import { useState, useRef, useEffect } from "react";
+import JoditEditor from "jodit-react";
 
 const CkEditor = ({ getArticle, resetArticle }) => {
   const editor = useRef(null);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
 
   const config = {
     readonly: false,
-    toolbarButtonSize: 'big',
+    toolbarButtonSize: "big",
     uploader: { insertImageAsBase64URI: true },
   };
 
@@ -16,7 +16,7 @@ const CkEditor = ({ getArticle, resetArticle }) => {
   }, [content]);
 
   useEffect(() => {
-    setContent('');
+    setContent("");
   }, [resetArticle]);
 
   return (

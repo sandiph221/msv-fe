@@ -15,7 +15,7 @@ import PhotoAlbumIcon from "@mui/icons-material/PhotoAlbum";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import * as moment from "moment-timezone";
-import React, { useState } from "react";
+import { useState } from "react";
 import LazyLoad from "react-lazyload";
 import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";

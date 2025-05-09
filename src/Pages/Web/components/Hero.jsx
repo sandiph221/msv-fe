@@ -1,5 +1,3 @@
-import React from "react"
-
 export const Hero = () => {
   return (
     <div className="space-y-14">
@@ -8,5 +6,5 @@ export const Hero = () => {
       </h3>
       <div className="h-80 w-full rounded-3xl bg-accent"></div>
     </div>
-  )
-}
+  );
+};

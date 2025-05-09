@@ -1,5 +1,5 @@
 // imports the React Javascript Library
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Grid,
   Button,

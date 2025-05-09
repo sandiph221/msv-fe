@@ -5,7 +5,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../Components/Spinner";
 import { formatImage, formatNumber } from "utils/functions.js";

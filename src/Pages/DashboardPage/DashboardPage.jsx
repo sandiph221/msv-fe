@@ -8,47 +8,47 @@ import {
   useMediaQuery,
   useTheme,
   withStyles,
-} from '@mui/material';
-import domtoimage from 'dom-to-image';
-import { saveAs } from 'file-saver';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import BarChart from '../../Components/BarChart';
-import { CustomButton } from '../../Components/CustomButton/CustomButton';
-import DownloadButton from '../../Components/DownloadButton/DownloadButton';
-import FilterDays from '../../Components/FilterDays';
-import Layout from '../../Components/Layout';
-import PageTitle from '../../Components/PageTitle/PageTitle';
-import { SnackBarDownload } from '../../Components/SnackBar/DownloadSnackBar';
-import SocialButton from '../../Components/SocialButton';
-import SocialMediaPostsCard from '../../Components/SocialMediaPostsCard/SocialMediaPostsCard';
-import Spinner from '../../Components/Spinner';
-import { PDFlogo, PNGlogo, XLSXlogo } from '../../Components/logosandicons';
+} from "@mui/material";
+import domtoimage from "dom-to-image";
+import { saveAs } from "file-saver";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { toast } from "react-toastify";
+import BarChart from "../../Components/BarChart";
+import { CustomButton } from "../../Components/CustomButton/CustomButton";
+import DownloadButton from "../../Components/DownloadButton/DownloadButton";
+import FilterDays from "../../Components/FilterDays";
+import Layout from "../../Components/Layout";
+import PageTitle from "../../Components/PageTitle/PageTitle";
+import { SnackBarDownload } from "../../Components/SnackBar/DownloadSnackBar";
+import SocialButton from "../../Components/SocialButton";
+import SocialMediaPostsCard from "../../Components/SocialMediaPostsCard/SocialMediaPostsCard";
+import Spinner from "../../Components/Spinner";
+import { PDFlogo, PNGlogo, XLSXlogo } from "../../Components/logosandicons";
 import {
   getAddedProfileList,
   getInteractions,
   getMoreSocialProfileTopPost,
   getSocialProfileFanGrowth,
   getSocialProfileTopPost,
-} from '../../store/actions/SocialMediaProfileAction';
-import { DashboardExport } from './DashboardExport';
-import DashboardPDF from './DashboardPDF';
+} from "../../store/actions/SocialMediaProfileAction";
+import { DashboardExport } from "./DashboardExport";
+import DashboardPDF from "./DashboardPDF";
 
-import { pdf } from '@react-pdf/renderer';
-import { CustomSelectDropdown } from '../../Components/CustomSelectDropdown/CustomSelectDropdown';
-import { createUserReportDownloadActivity } from '../../store/actions/UserActivityAction';
-import { NO_DATA_AVAILABLE } from '../../utils/constant';
-import { Styles } from './Style';
-import ConnectToSocial from 'Customer/Components/ConnectToSocial';
+import { pdf } from "@react-pdf/renderer";
+import { CustomSelectDropdown } from "../../Components/CustomSelectDropdown/CustomSelectDropdown";
+import { createUserReportDownloadActivity } from "../../store/actions/UserActivityAction";
+import { NO_DATA_AVAILABLE } from "../../utils/constant";
+import { Styles } from "./Style";
+import ConnectToSocial from "Customer/Components/ConnectToSocial";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
 const StyledMenuItem = withStyles({
   root: {
-    '&.Mui-selected': {
-      backgroundColor: '#FFF8DE',
+    "&.Mui-selected": {
+      backgroundColor: "#FFF8DE",
     },
   },
 })(MenuItem);
@@ -56,8 +56,8 @@ const StyledMenuItem = withStyles({
 const DashboardPage = ({ history }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down('xs'));
-  const sm = useMediaQuery(theme.breakpoints.down('sm'));
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
   const [selectProfile, setSelectProfile] = useState([]);
   const [showDownloadToast, setShowDownloadToast] = useState(false);
   //handle change of select profile
@@ -67,29 +67,29 @@ const DashboardPage = ({ history }) => {
 
   // Fan Growth Chart
   const [fanGrowthData, setFanGrowthData] = useState({
-    datasets: '',
-    labels: '',
+    datasets: "",
+    labels: "",
   });
   const [fanGrowthSelectedProfiles, setFanGrowthSelectedProfiles] = useState(
     []
   );
-  const [fanGrowthDateFilter, setfanGrowthDateFilter] = useState('');
+  const [fanGrowthDateFilter, setfanGrowthDateFilter] = useState("");
   // Fan Growth Chart
 
   // Interactions Chart
   const [interactionsData, setinteractionsData] = useState({
-    datasets: '',
-    labels: '',
+    datasets: "",
+    labels: "",
   });
   const [interactionSelectedProfiles, setinteractionSelectedProfiles] =
     useState([]);
-  const [interactionDateFilter, setinteractionDateFilter] = useState('');
+  const [interactionDateFilter, setinteractionDateFilter] = useState("");
   const [interaction1kPerFans, setInteraction1KPerFans] = useState(false);
   //Interactions Chart
 
   //For Chart Images
-  const [Image1, setImage1] = useState('');
-  const [Image2, setImage2] = useState('');
+  const [Image1, setImage1] = useState("");
+  const [Image2, setImage2] = useState("");
 
   //Top Posts limit and page
 
@@ -119,15 +119,15 @@ const DashboardPage = ({ history }) => {
 
   let subdomain = user.CustomerSubdomain.subdomain;
 
-  const { feeds, pages } = profileTopPost ? profileTopPost : '';
+  const { feeds, pages } = profileTopPost ? profileTopPost : "";
 
   React.useEffect(() => {
     //checking internet connection
 
-    var condition = navigator.onLine ? 'online' : 'offline';
+    var condition = navigator.onLine ? "online" : "offline";
 
-    if (condition === 'offline') {
-      toast.error('No internet connection');
+    if (condition === "offline") {
+      toast.error("No internet connection");
     }
   }, [customDateRangeRed, activeSocialMediaType, selectProfile]);
 
@@ -157,8 +157,8 @@ const DashboardPage = ({ history }) => {
         fansGrowth && fansGrowth.timeline
           ? fansGrowth.timeline.map(
               (date) =>
-                `${new Date(date.end).toDateString().split(' ')[1]} ${
-                  new Date(date.end).toDateString().split(' ')[2]
+                `${new Date(date.end).toDateString().split(" ")[1]} ${
+                  new Date(date.end).toDateString().split(" ")[2]
                 }`
             )
           : [],
@@ -201,8 +201,8 @@ const DashboardPage = ({ history }) => {
         interactionData && interactionData.timeline
           ? interactionData.timeline.map(
               (date) =>
-                `${new Date(date.end).toDateString().split(' ')[1]} ${
-                  new Date(date.end).toDateString().split(' ')[2]
+                `${new Date(date.end).toDateString().split(" ")[1]} ${
+                  new Date(date.end).toDateString().split(" ")[2]
                 }`
             )
           : [],
@@ -263,8 +263,8 @@ const DashboardPage = ({ history }) => {
   }
 
   useEffect(() => {
-    var Image1 = document.querySelector('#totalFollowers');
-    var Image2 = document.querySelector('#interaction');
+    var Image1 = document.querySelector("#totalFollowers");
+    var Image2 = document.querySelector("#interaction");
 
     setTimeout(() => {
       if (Image1) {
@@ -327,7 +327,7 @@ const DashboardPage = ({ history }) => {
 
   const generatePdfDocument = async () => {
     //send download activity report function
-    createUserDownloadActivity('pdf');
+    createUserDownloadActivity("pdf");
 
     setShowDownloadToast(true);
     setTimeout(() => {
@@ -357,14 +357,14 @@ const DashboardPage = ({ history }) => {
 
   function screenshotPage() {
     //send download activity report function
-    createUserDownloadActivity('screenshot');
+    createUserDownloadActivity("screenshot");
 
     setShowDownloadToast(true);
     setTimeout(() => {
       setShowDownloadToast(false);
     }, 3000);
-    var wrapper = document.querySelector('.dashboardPageContainer');
-    domtoimage.toBlob(wrapper, { bgcolor: '#ffffff' }).then(function (blob) {
+    var wrapper = document.querySelector(".dashboardPageContainer");
+    domtoimage.toBlob(wrapper, { bgcolor: "#ffffff" }).then(function (blob) {
       saveAs(
         blob,
         `${selectedTopPostProfile.name} ${activeSocialMediaType}-overview.png`
@@ -393,64 +393,51 @@ const DashboardPage = ({ history }) => {
 
   function addTopPostProfileId() {
     dispatch({
-      type: 'REMOVE_PROFILES_FROM_COMPARE',
+      type: "REMOVE_PROFILES_FROM_COMPARE",
       payload: [],
     });
     dispatch({
-      type: 'TOP_POST_ID',
+      type: "TOP_POST_ID",
       payload: selectProfile,
     });
-    history.push('/content-newsfeed');
+    history.push("/content-newsfeed");
   }
 
   return (
     <Layout>
       <div className={classes.main}>
-        <div
-          style={{ padding: 10 }}
-          className='dashboardPageContainer'
-        >
-          { addedProfileList.length === 0 ?
+        <div style={{ padding: 10 }} className="dashboardPageContainer">
+          {addedProfileList.length === 0 ? (
             <ConnectToSocial />
-            :
-            <Container
-              disableGutters
-              maxWidth='xl'
-            >
+          ) : (
+            <Container disableGutters maxWidth="xl">
               <Box className={classes.topFilter}>
-                <Grid
-                  container
-                  spacing={2}
-                  justifyContent='space-between'
-                >
+                <Grid container spacing={2} justifyContent="space-between">
                   <Grid item>
                     <SocialButton />
                   </Grid>
-                  <Grid
-                    item
-                    style={{ display: 'flex' }}
-                  >
+                  <Grid item style={{ display: "flex" }}>
                     <FilterDays />
                     <DownloadButton>
                       <StyledMenuItem onClick={() => generatePdfDocument()}>
-                        {' '}
+                        {" "}
                         <img
                           style={{ width: 20, height: 20, marginRight: 5 }}
-                          alt='pdf logo'
+                          alt="pdf logo"
                           src={PDFlogo}
-                        />{' '}
-                        Export pdf{' '}
+                        />{" "}
+                        Export pdf{" "}
                       </StyledMenuItem>
                       <StyledMenuItem onClick={() => screenshotPage()}>
                         <img
                           style={{ width: 20, height: 20, marginRight: 5 }}
-                          alt='png logo'
+                          alt="png logo"
                           src={PNGlogo}
-                        />{' '}
-                        Export png{' '}
+                        />{" "}
+                        Export png{" "}
                       </StyledMenuItem>
                       <StyledMenuItem>
-                        {' '}
+                        {" "}
                         <DashboardExport
                           xlsxLogo={XLSXlogo}
                           showDownloadSnackBar={setShowDownloadToast}
@@ -460,9 +447,9 @@ const DashboardPage = ({ history }) => {
                           fanGrowthDateFilter={fanGrowthDateFilter}
                           onClick={() => {
                             //send download activity report function
-                            createUserDownloadActivity('excel');
+                            createUserDownloadActivity("excel");
                           }}
-                        />{' '}
+                        />{" "}
                       </StyledMenuItem>
                     </DownloadButton>
                   </Grid>
@@ -474,28 +461,22 @@ const DashboardPage = ({ history }) => {
                 <Spinner />
               ) : addedProfileList && addedProfileList.length !== 0 ? (
                 <>
-                  <Grid
-                    className={classes.charts}
-                    container
-                    spacing={3}
-                  >
-                    <Grid
-                      className={classes.growthChart}
-                      item
-                      xs={12}
-                      lg={6}
-                    >
+                  <Grid className={classes.charts} container spacing={3}>
+                    <Grid className={classes.growthChart} item xs={12} lg={6}>
                       {addedProfileList.length !== 0 ? (
                         <div>
                           <BarChart
-                            chartId='totalFollowers'
-                            chartTitle='Follower growth'
-                            graphTitle='Fan growth'
-                            showLabel='true'
+                            chartId="totalFollowers"
+                            chartTitle="Follower growth"
+                            graphTitle="Fan growth"
+                            showLabel="true"
                             showPeriod={true}
                             adddeSocialMedaiProfile={addedProfileList}
                             chartData={fanGrowthData}
-                            getSelectedProfile={(selectProfiles, dateFilter) => {
+                            getSelectedProfile={(
+                              selectProfiles,
+                              dateFilter
+                            ) => {
                               fanGrowthChart(selectProfiles, dateFilter);
                             }}
                           />
@@ -508,36 +489,28 @@ const DashboardPage = ({ history }) => {
                           <div className={classes.graphTitleSection}>
                             <Typography
                               className={classes.graphTitle}
-                              variant='h5'
+                              variant="h5"
                             >
                               Top Followers
                             </Typography>
                           </div>
 
                           <div className={classes.chartFallBack}>
-                            <Typography
-                              className={classes.noData}
-                              variant='h6'
-                            >
+                            <Typography className={classes.noData} variant="h6">
                               {NO_DATA_AVAILABLE}
                             </Typography>
                           </div>
                         </div>
                       )}
                     </Grid>
-                    <Grid
-                      className={classes.growthChart}
-                      item
-                      xs={12}
-                      lg={6}
-                    >
+                    <Grid className={classes.growthChart} item xs={12} lg={6}>
                       {addedProfileList.length != 0 ? (
                         <div>
                           <BarChart
-                            chartId='interaction'
-                            chartTitle='Interactions'
-                            graphTitle='Interactions'
-                            showLabel='true'
+                            chartId="interaction"
+                            chartTitle="Interactions"
+                            graphTitle="Interactions"
+                            showLabel="true"
                             showPeriod={true}
                             adddeSocialMedaiProfile={addedProfileList}
                             chartData={interactionsData}
@@ -564,17 +537,14 @@ const DashboardPage = ({ history }) => {
                           <div className={classes.graphTitleSection}>
                             <Typography
                               className={classes.graphTitle}
-                              variant='h5'
+                              variant="h5"
                             >
                               Interactions
                             </Typography>
                           </div>
 
                           <div className={classes.chartFallBack}>
-                            <Typography
-                              className={classes.noData}
-                              variant='h6'
-                            >
+                            <Typography className={classes.noData} variant="h6">
                               {NO_DATA_AVAILABLE}
                             </Typography>
                           </div>
@@ -583,16 +553,8 @@ const DashboardPage = ({ history }) => {
                     </Grid>
                   </Grid>
 
-                  <Grid
-                    className={classes.charts}
-                    container
-                    spacing={3}
-                  >
-                    <Grid
-                      className={classes.growthChart}
-                      item
-                      xs={12}
-                    >
+                  <Grid className={classes.charts} container spacing={3}>
+                    <Grid className={classes.growthChart} item xs={12}>
                       <div>
                         <div className={classes.topPostHeadSection}>
                           <Typography className={classes.subTitle}>
@@ -600,16 +562,15 @@ const DashboardPage = ({ history }) => {
                           </Typography>
                           <CustomSelectDropdown
                             addedProfileList={addedProfileList}
-                            selectProfileHandleChange={selectProfileHandleChange}
+                            selectProfileHandleChange={
+                              selectProfileHandleChange
+                            }
                             activeSocialMediaType={activeSocialMediaType}
                             selectProfile={selectProfile}
                             subdomain={subdomain}
                           />
                         </div>
-                        <Grid
-                          container
-                          spacing={3}
-                        >
+                        <Grid container spacing={3}>
                           {profileTopPostLoading ? (
                             <div className={classes.topPost}>
                               <div className={classes.chartFallBack}>
@@ -642,11 +603,11 @@ const DashboardPage = ({ history }) => {
                               </Grid>
                             ))
                           ) : (
-                            <div style={{ width: '100%', margin: 10 }}>
+                            <div style={{ width: "100%", margin: 10 }}>
                               <div className={classes.chartFallBack}>
                                 <Typography
                                   className={classes.noData}
-                                  variant='h6'
+                                  variant="h6"
                                 >
                                   {NO_DATA_AVAILABLE}
                                 </Typography>
@@ -656,7 +617,7 @@ const DashboardPage = ({ history }) => {
                         </Grid>
                         {feeds && feeds.length !== 0 && (
                           <div className={classes.loadMoreButtonDivDashboard}>
-                            {' '}
+                            {" "}
                             {page_limit === 20 || pages === 1 ? (
                               <CustomButton onClick={addTopPostProfileId}>
                                 Show all
@@ -665,7 +626,7 @@ const DashboardPage = ({ history }) => {
                               <CustomButton onClick={changePageLimit}>
                                 Load more posts
                               </CustomButton>
-                            )}{' '}
+                            )}{" "}
                           </div>
                         )}
                       </div>
@@ -673,14 +634,14 @@ const DashboardPage = ({ history }) => {
                   </Grid>
                 </>
               ) : (
-                <Typography align='center'>No records found</Typography>
+                <Typography align="center">No records found</Typography>
               )}
             </Container>
-          }
+          )}
         </div>
       </div>
       {showDownloadToast && (
-        <SnackBarDownload message={'Your download should begin in a moment'} />
+        <SnackBarDownload message={"Your download should begin in a moment"} />
       )}
     </Layout>
   );

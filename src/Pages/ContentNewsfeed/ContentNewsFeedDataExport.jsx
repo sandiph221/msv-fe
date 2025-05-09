@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactExport from "react-data-export";
 import { useSelector } from "react-redux";
 import { totalEngagementPerKFans } from "utils/functions.js";

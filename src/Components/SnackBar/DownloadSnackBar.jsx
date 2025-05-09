@@ -1,4 +1,3 @@
-import React from 'react'
 import Snackbar from '@mui/material/Snackbar';
 import { CircularProgress, withStyles } from '@mui/material';
 

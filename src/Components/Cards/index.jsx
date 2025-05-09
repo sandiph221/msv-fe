@@ -1,16 +1,16 @@
-import React, { Fragment } from 'react';
+import { Fragment } from "react";
 import {
   Avatar,
   Card,
   Typography,
   makeStyles,
   CardContent,
-} from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CreateIcon from '@mui/icons-material/Create';
-import Styles from './Styles';
-import * as constant from '../../utils/constant';
+} from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CreateIcon from "@mui/icons-material/Create";
+import Styles from "./Styles";
+import * as constant from "../../utils/constant";
 // get our fontawesome imports
 // import FontAwesome from 'react-fontawesome';
 // import faStyles from 'font-awesome/css/font-awesome.css';
@@ -33,10 +33,7 @@ const Cards = ({ handleDeleteConfirm, item, getSelectedData }) => {
       >
         <div className={classes.imageTextContainer}>
           <CardContent className={classes.userProfile}>
-            <Avatar
-              src={item.imageURL}
-              rounded
-            />
+            <Avatar src={item.imageURL} rounded />
           </CardContent>
 
           <CardContent className={classes.userDetails}>
@@ -47,7 +44,7 @@ const Cards = ({ handleDeleteConfirm, item, getSelectedData }) => {
                   : `${item.first_name} ${item.last_name}`}
               </Typography>
             ) : (
-              ''
+              ""
             )}
             <Typography className={classes.subtitleStyle}>
               {item.email}

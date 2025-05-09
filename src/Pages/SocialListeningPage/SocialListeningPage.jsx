@@ -6,46 +6,46 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
-} from '@mui/material';
-import React, { useEffect } from 'react';
-import Layout from '../../Components/Layout';
-import PageTitle from '../../Components/PageTitle/PageTitle';
-import SocialButton from '../../Components/SocialButton';
-import FilterDays from '../../Components/FilterDays';
-import styles from './Styles';
-import { BubbleChart } from '../../Components/BubbleChart/BubbleChart';
-import { SocialMediaCardLabels } from '../../Components/SocialMediaLabelsCard/SocialMediaLabelsCard';
-import PeopleIcon from '@mui/icons-material/People';
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
-import LineCharts from '../../Components/LineChart';
-import { useDispatch, useSelector } from 'react-redux';
+} from "@mui/material";
+import { useEffect } from "react";
+import Layout from "../../Components/Layout";
+import PageTitle from "../../Components/PageTitle/PageTitle";
+import SocialButton from "../../Components/SocialButton";
+import FilterDays from "../../Components/FilterDays";
+import styles from "./Styles";
+import { BubbleChart } from "../../Components/BubbleChart/BubbleChart";
+import { SocialMediaCardLabels } from "../../Components/SocialMediaLabelsCard/SocialMediaLabelsCard";
+import PeopleIcon from "@mui/icons-material/People";
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import LineCharts from "../../Components/LineChart";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getNoOfpeople,
   getSentimentData,
   resetSearchQuery,
   setSearchQuery,
-} from '../../store/actions/SocialMediaProfileAction';
-import TextInput from '../../Components/TextInput/TextInput';
-import Spinner from '../../Components/Spinner';
-import SocialListeningChipData from './SocialListeningChipData';
-import { SnackBarDownload } from '../../Components/SnackBar/DownloadSnackBar';
+} from "../../store/actions/SocialMediaProfileAction";
+import TextInput from "../../Components/TextInput/TextInput";
+import Spinner from "../../Components/Spinner";
+import SocialListeningChipData from "./SocialListeningChipData";
+import { SnackBarDownload } from "../../Components/SnackBar/DownloadSnackBar";
 
-import { NO_DATA_AVAILABLE } from '../../utils/constant';
-import axios from 'axios';
-import Feed from './Feed';
+import { NO_DATA_AVAILABLE } from "../../utils/constant";
+import axios from "axios";
+import Feed from "./Feed";
 
 const useStyles = makeStyles((theme) => styles(theme));
 
 const SocialListeningPage = () => {
   const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down('xs'));
-  const sm = useMediaQuery(theme.breakpoints.down('sm'));
-  const md = useMediaQuery(theme.breakpoints.down('md'));
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
+  const md = useMediaQuery(theme.breakpoints.down("md"));
   const classes = useStyles({ xs });
   const dispatch = useDispatch();
-  const [searchKeyWord, setSearchKeyWord] = React.useState('');
+  const [searchKeyWord, setSearchKeyWord] = React.useState("");
   const [sentimentsChartData, setSentimentsChartData] = React.useState();
-  const [sentimentsDateFilter, setSentimentsDateFilter] = React.useState('day');
+  const [sentimentsDateFilter, setSentimentsDateFilter] = React.useState("day");
   const [loader, setLoader] = React.useState(false);
   const [stateSearchData, setStateSearchData] = React.useState([]);
   const [loadingAlert, setLoadingAlert] = React.useState(false);
@@ -68,7 +68,7 @@ const SocialListeningPage = () => {
 
   const { startDate, endDate } = customDateRangeRed
     ? customDateRangeRed[0]
-    : '';
+    : "";
 
   const getPosts = async (page) => {
     const posts = await axios.get(
@@ -93,7 +93,7 @@ const SocialListeningPage = () => {
 
   const handleSearchFunction = async (event) => {
     await dispatch(setSearchQuery(searchKeyWord));
-    setSearchKeyWord('');
+    setSearchKeyWord("");
   };
 
   const getNumberOfPeople = async () => {
@@ -131,7 +131,7 @@ const SocialListeningPage = () => {
     if (
       !noOfPeopleLoading &&
       sentimentsDateFilter &&
-      searchKeyWord === '' &&
+      searchKeyWord === "" &&
       searchQueryData &&
       searchQueryData.length !== 0
     ) {
@@ -147,8 +147,8 @@ const SocialListeningPage = () => {
           sentimentInTimeData && sentimentInTimeData.timeline
             ? sentimentInTimeData.timeline.map(
                 (date) =>
-                  `${new Date(date.end).toDateString().split(' ')[1]} ${
-                    new Date(date.end).toDateString().split(' ')[2]
+                  `${new Date(date.end).toDateString().split(" ")[1]} ${
+                    new Date(date.end).toDateString().split(" ")[2]
                   }`
               )
             : [],
@@ -167,38 +167,35 @@ const SocialListeningPage = () => {
 
   return (
     <Layout>
-      <Grid
-        className={classes.row}
-        container
-      >
+      <Grid className={classes.row} container>
         <div className={classes.tabHeaderComp}>
           <SocialButton socialListening={true} />
           <FilterDays />
         </div>
-        <PageTitle title='Social Listening' />
+        <PageTitle title="Social Listening" />
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
             marginBottom: 50,
           }}
         >
           <div
             style={{
-              width: xs ? '100%' : '50%',
-              padding: xs ? '0px 20px 10px' : '0px 40px 10px',
-              margin: '0 auto',
+              width: xs ? "100%" : "50%",
+              padding: xs ? "0px 20px 10px" : "0px 40px 10px",
+              margin: "0 auto",
             }}
           >
-            {' '}
+            {" "}
             <TextInput
               suggestions={false}
-              placeholder='Search by keywords'
+              placeholder="Search by keywords"
               value={searchKeyWord}
               onChange={(e) => setSearchKeyWord(e.target.value)}
               onKeyPress={(event) => {
-                if (event.key === 'Enter' && event.target.value !== '') {
+                if (event.key === "Enter" && event.target.value !== "") {
                   handleSearchFunction(event);
                 }
               }}
@@ -206,7 +203,7 @@ const SocialListeningPage = () => {
               disable={noOfPeopleLoading || socialListeningError ? true : false}
             />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <SocialListeningChipData
               clearDisplayData={clearDisplayData}
               chipData={searchQueryData}
@@ -226,36 +223,30 @@ const SocialListeningPage = () => {
             )}
           </div>
         </div>
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: "relative" }}>
           {searchQueryData.length > 0 && socialListeningDataLoading ? (
             <Spinner />
           ) : (
             searchQueryData.length > 0 && (
               <>
                 <div
-                  id='card-labels'
+                  id="card-labels"
                   style={{
                     flexGrow: 1,
-                    padding: xs ? '0px 20px 35px' : '0px 40px 35px',
-                    width: '100%',
+                    padding: xs ? "0px 20px 35px" : "0px 40px 35px",
+                    width: "100%",
                   }}
                 >
-                  <Grid
-                    container
-                    spacing={3}
-                  >
-                    <Grid
-                      item
-                      style={{ width: xs ? '100%' : '450px' }}
-                    >
-                      <div id='social-listening-card'>
+                  <Grid container spacing={3}>
+                    <Grid item style={{ width: xs ? "100%" : "450px" }}>
+                      <div id="social-listening-card">
                         <SocialMediaCardLabels
-                          cardTitle='No. of people'
+                          cardTitle="No. of people"
                           cardFigures={noOfPeople.total_people_count}
-                          colorCode='rgba(164,39,255, 0.1)'
+                          colorCode="rgba(164,39,255, 0.1)"
                           cardIcon={
                             <PeopleIcon
-                              style={{ fontSize: 24, color: '#A427FF' }}
+                              style={{ fontSize: 24, color: "#A427FF" }}
                             />
                           }
                           loading={noOfPeopleLoading || socialListeningError}
@@ -264,20 +255,17 @@ const SocialListeningPage = () => {
                       </div>
                     </Grid>
 
-                    <Grid
-                      item
-                      style={{ width: xs ? '100%' : '450px' }}
-                    >
-                      <div id='social-listening-card'>
+                    <Grid item style={{ width: xs ? "100%" : "450px" }}>
+                      <div id="social-listening-card">
                         <SocialMediaCardLabels
-                          cardTitle='Social interactions'
+                          cardTitle="Social interactions"
                           cardFigures={
                             noOfSocialInteraction.total_interactions_count
                           }
-                          colorCode='rgba(11, 102, 112, 0.1)'
+                          colorCode="rgba(11, 102, 112, 0.1)"
                           cardIcon={
                             <CommentOutlinedIcon
-                              style={{ fontSize: 24, color: '#0B6670' }}
+                              style={{ fontSize: 24, color: "#0B6670" }}
                             />
                           }
                           loading={noOfPeopleLoading || socialListeningError}
@@ -288,10 +276,10 @@ const SocialListeningPage = () => {
                   </Grid>
                 </div>
                 <Container
-                  maxWidth='xl'
+                  maxWidth="xl"
                   style={{
-                    marginBottom: '5%',
-                    padding: xs ? '0px 20px' : '0px 42px',
+                    marginBottom: "5%",
+                    padding: xs ? "0px 20px" : "0px 42px",
                   }}
                   disableGutters={true}
                 >
@@ -299,12 +287,12 @@ const SocialListeningPage = () => {
                     container
                     spacing={2}
                     style={{
-                      display: sm ? 'block' : 'flex',
-                      justifyContent: 'space-between',
+                      display: sm ? "block" : "flex",
+                      justifyContent: "space-between",
                     }}
                   >
                     <Grid
-                      id='bubble-chart'
+                      id="bubble-chart"
                       item
                       xs={12}
                       sm={12}
@@ -320,7 +308,7 @@ const SocialListeningPage = () => {
                       //     : "100%",
                       // }}
                     >
-                      {' '}
+                      {" "}
                       <Typography
                         style={{
                           fontSize: 22,
@@ -331,15 +319,15 @@ const SocialListeningPage = () => {
                       >
                         Top Emojis
                       </Typography>
-                      <div style={{ position: 'relative', minHeight: 430 }}>
+                      <div style={{ position: "relative", minHeight: 430 }}>
                         {noOfPeopleLoading || socialListeningError ? (
                           <Spinner className={classes.loader} />
                         ) : emojiChartData && emojiChartData.length > 0 ? (
                           <div
                             style={{
-                              border: '1px solid #bdbdbd',
+                              border: "1px solid #bdbdbd",
                               borderRadius: 4,
-                              backgroundColor: '#fff',
+                              backgroundColor: "#fff",
                               minHeight: 430,
                             }}
                           >
@@ -349,15 +337,15 @@ const SocialListeningPage = () => {
                           <div
                             style={{
                               minHeight: 430,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              border: '1px solid #bdbdbd',
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              border: "1px solid #bdbdbd",
                               borderRadius: 4,
-                              backgroundColor: '#fff',
+                              backgroundColor: "#fff",
                             }}
                           >
-                            <Typography variant='h6'>
+                            <Typography variant="h6">
                               {NO_DATA_AVAILABLE}
                             </Typography>
                           </div>
@@ -371,7 +359,7 @@ const SocialListeningPage = () => {
                       md={6}
                       lg={6}
                       xl={6}
-                      id='sentiments-graph'
+                      id="sentiments-graph"
                     >
                       <Typography
                         style={{
@@ -380,25 +368,25 @@ const SocialListeningPage = () => {
                           fontWeight: 600,
                           marginBottom: 17,
                           position: loader
-                            ? 'relative'
+                            ? "relative"
                             : !loader && sentimentInTimeData.length === 0
-                            ? 'relative'
-                            : 'absolute',
+                            ? "relative"
+                            : "absolute",
                         }}
                       >
                         Sentiment in Time
                       </Typography>
 
-                      <div style={{ position: 'relative', minHeight: 430 }}>
+                      <div style={{ position: "relative", minHeight: 430 }}>
                         {(noOfPeopleLoading ||
                           socialListeningError ||
                           sentimentInTimeDataLoading) && (
                           <Spinner className={classes.loader} />
-                        )}{' '}
+                        )}{" "}
                         {sentimentInTimeData &&
                         sentimentInTimeData.length !== 0 ? (
                           <LineCharts
-                            graphTitle='Posts '
+                            graphTitle="Posts "
                             adddeSocialMedaiProfile={null}
                             chartData={
                               sentimentInTimeDataLoading
@@ -433,7 +421,7 @@ const SocialListeningPage = () => {
                           //     </div>
                           //   </div>
                           // )
-                          ''
+                          ""
                         )}
                       </div>
                     </Grid>
@@ -445,17 +433,13 @@ const SocialListeningPage = () => {
         </div>
       </Grid>
       {displayPostList.length ? (
-        <Feed
-          data={displayPostList}
-          getFeed={getPosts}
-          page={page}
-        />
+        <Feed data={displayPostList} getFeed={getPosts} page={page} />
       ) : null}
 
       {noOfPeopleLoading || socialListeningError ? (
         <SnackBarDownload
-          sociallistening='true'
-          message={'Fetching data.....'}
+          sociallistening="true"
+          message={"Fetching data....."}
         />
       ) : null}
     </Layout>

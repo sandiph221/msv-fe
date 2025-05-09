@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from "react";
 
 import {
   Container,
@@ -12,32 +12,32 @@ import {
   makeStyles,
   TextField,
   withStyles,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import ReplyIcon from '@mui/icons-material/Reply';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import Styles from '../../Pages/Help/Styles';
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import ReplyIcon from "@mui/icons-material/Reply";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Styles from "../../Pages/Help/Styles";
 import {
   creatContactSupport,
   creatRespondSupport,
-  getContactSupportList
-} from '../../store/actions/HelpPageAction';
-import * as constant from '../../utils/constant';
-import { CustomButton } from '../CustomButton/CustomButton';
-import Spinner from '../Spinner';
+  getContactSupportList,
+} from "../../store/actions/HelpPageAction";
+import * as constant from "../../utils/constant";
+import { CustomButton } from "../CustomButton/CustomButton";
+import Spinner from "../Spinner";
 
 //custom style
 const useStyles = makeStyles((theme) => ({
   inputLabel: {
-    color: '#646970',
+    color: "#646970",
     fontWeight: 400,
     letterSpacing: 0.5,
     fontSize: 14,
   },
   DialogFooter: {
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
   },
 }));
 const useStyles1 = makeStyles((theme) => Styles(theme));
@@ -45,15 +45,15 @@ const useStyles1 = makeStyles((theme) => Styles(theme));
 const StyledTextField = withStyles({
   root: {
     height: 35,
-    '& .MuiOutlinedInput-root': {
-      '& input': {
+    "& .MuiOutlinedInput-root": {
+      "& input": {
         zIndex: 9999,
-        padding: '10px 20px',
+        padding: "10px 20px",
       },
-      '& fieldset': {
+      "& fieldset": {
         borderRadius: 10,
         backgroundColor: (props) =>
-          props.backgroundColor ? '#fff' : 'transparent',
+          props.backgroundColor ? "#fff" : "transparent",
       },
     },
   },
@@ -61,8 +61,8 @@ const StyledTextField = withStyles({
 
 const StyledDialog = withStyles({
   paper: {
-    padding: (props) => (props.xs ? 20 : '37px 25px'),
-    height: (props) => (props.customersuportform ? '75vh' : '100vh'),
+    padding: (props) => (props.xs ? 20 : "37px 25px"),
+    height: (props) => (props.customersuportform ? "75vh" : "100vh"),
     margin: 0,
     borderRadius: 19,
   },
@@ -73,8 +73,8 @@ const StyledDialogTitle = withStyles({
     padding: 0,
     marginBottom: 15,
 
-    color: 'rgb(251, 226, 129)',
-    '& .MuiTypography-root': {
+    color: "rgb(251, 226, 129)",
+    "& .MuiTypography-root": {
       fontSize: 32,
       fontWeight: 600,
     },
@@ -89,11 +89,11 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
   const [formLoader, setFormLoader] = React.useState(false);
   const [errors, setErrors] = React.useState({});
   const [supportForm, setSupportForm] = React.useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    mobileNumber: '',
-    message: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobileNumber: "",
+    message: "",
   });
 
   const { user } = useSelector((state) => state.auth);
@@ -108,7 +108,7 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
     setErrors({});
     setSupportForm((prevProps) => ({
       ...prevProps,
-      message: '',
+      message: "",
     }));
   };
 
@@ -128,34 +128,34 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
     // Check for empty value
 
     if (!customerSupportForm && !supportForm.firstName) {
-      formErrors.firstName = 'First Name is Required';
+      formErrors.firstName = "First Name is Required";
     }
     if (!customerSupportForm && !supportForm.lastName) {
-      formErrors.lastName = 'Last Name is Required';
+      formErrors.lastName = "Last Name is Required";
     }
     if (customerSupportForm && !supportForm.email) {
-      formErrors.email = 'Email is Required';
+      formErrors.email = "Email is Required";
     }
-    if (typeof supportForm.email !== 'undefined') {
+    if (typeof supportForm.email !== "undefined") {
       //regular expression for email validation
       var pattern = new RegExp(constant.EMAIL_PATTERN);
       if (!pattern.test(supportForm.email)) {
-        formErrors.email = 'Please enter valid email-ID.';
+        formErrors.email = "Please enter valid email-ID.";
       }
     }
     if (!customerSupportForm && !supportForm.mobileNumber) {
-      formErrors.mobileNumber = 'Mobile number is Required';
+      formErrors.mobileNumber = "Mobile number is Required";
     }
     /* checking if the fields contains only number */
     if (!customerSupportForm && isNaN(supportForm.mobileNumber)) {
-      formErrors.phoneNumber = 'Mobile Number must be a valid ';
+      formErrors.phoneNumber = "Mobile Number must be a valid ";
     }
     if (specialCharacters.test(supportForm.mobileNumber)) {
       formErrors.mobileNumber =
-        'Mobile Number cannot contain any special characters.';
+        "Mobile Number cannot contain any special characters.";
     }
     if (customerSupportForm && !supportForm.message) {
-      formErrors.message = 'Message is Required';
+      formErrors.message = "Message is Required";
     }
 
     setErrors(formErrors);
@@ -169,7 +169,7 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
           setErrors({});
           setSupportForm((prevProps) => ({
             ...prevProps,
-            message: '',
+            message: "",
           }));
           setOpen(false);
         }
@@ -190,11 +190,11 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
           setFormLoader(false);
           setErrors({});
           setSupportForm({
-            firstName: '',
-            lastName: '',
-            email: '',
-            mobileNumber: '',
-            message: '',
+            firstName: "",
+            lastName: "",
+            email: "",
+            mobileNumber: "",
+            message: "",
           });
           setOpen(false);
           dispatch(getContactSupportList());
@@ -210,7 +210,7 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
   };
 
   useEffect(() => {
-    if (user && user.role === 'customer-admin') {
+    if (user && user.role === "customer-admin") {
       setSupportForm({
         firstName: user.first_name,
         lastName: user.last_name,
@@ -236,21 +236,18 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
           disableFocusRipple
           disabled={data.answered}
           onClick={handleClickOpen}
-          style={{ color: data.answered ? '#bdbdbd' : '#343434' }}
+          style={{ color: data.answered ? "#bdbdbd" : "#343434" }}
         >
           <ReplyIcon />
         </IconButton>
       ) : (
-        <div
-          className={classes1.helpList}
-          onClick={handleClickOpen}
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className={classes1.helpList} onClick={handleClickOpen}>
+          <div style={{ display: "flex", alignItems: "center" }}>
             <div
               className={classes1.helpIconList}
-              style={{ backgroundColor: '#f8c1441a' }}
+              style={{ backgroundColor: "#f8c1441a" }}
             >
-              <MailOutlineIcon style={{ color: '#f8c144' }} />
+              <MailOutlineIcon style={{ color: "#f8c144" }} />
             </div>
 
             <p> Contact Support </p>
@@ -262,56 +259,49 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
         customersuportform={customerSupportForm}
         open={open}
         onClose={handleClose}
-        aria-labelledby='form-dialog-title'
-        maxWidth='sm'
+        aria-labelledby="form-dialog-title"
+        maxWidth="sm"
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <StyledDialogTitle id='form-dialog-title'>
-            {' '}
-            {customerSupportForm ? 'Respond' : 'Support'}{' '}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <StyledDialogTitle id="form-dialog-title">
+            {" "}
+            {customerSupportForm ? "Respond" : "Support"}{" "}
           </StyledDialogTitle>
           <IconButton
-            aria-label='close'
+            aria-label="close"
             onClick={handleClose}
             style={{
-              border: '1px solid #ccc',
+              border: "1px solid #ccc",
               borderRadius: 9,
               minHeight: 44,
               maxHeight: 44,
             }}
           >
-            <CloseIcon style={{ color: '#323132' }} />
+            <CloseIcon style={{ color: "#323132" }} />
           </IconButton>
         </div>
         <DialogContent
-          style={{ paddingLeft: 0, paddingRight: 0, overflowX: 'hidden' }}
+          style={{ paddingLeft: 0, paddingRight: 0, overflowX: "hidden" }}
         >
           <Container disableGutters>
-            <Grid
-              container
-              spacing={2}
-            >
+            <Grid container spacing={2}>
               {!customerSupportForm && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                >
+                <Grid item xs={12} md={6}>
                   <InputLabel
                     className={classes.inputLabel}
-                    htmlFor='my-input'
+                    htmlFor="my-input"
                     style={{ marginBottom: 14 }}
                   >
-                    {' '}
-                    First Name *{' '}
+                    {" "}
+                    First Name *{" "}
                   </InputLabel>
                   <StyledTextField
-                    variant='outlined'
+                    variant="outlined"
                     autoFocus
-                    id='firstName'
-                    name='firstName'
-                    placeholder='First name'
-                    type='text'
+                    id="firstName"
+                    name="firstName"
+                    placeholder="First name"
+                    type="text"
                     value={supportForm.firstName}
                     onChange={handleChange}
                     fullWidth
@@ -321,26 +311,22 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
                 </Grid>
               )}
               {!customerSupportForm && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                >
+                <Grid item xs={12} md={6}>
                   <InputLabel
                     className={classes.inputLabel}
-                    htmlFor='my-input'
+                    htmlFor="my-input"
                     style={{ marginBottom: 14 }}
                   >
-                    {' '}
-                    Last Name *{' '}
+                    {" "}
+                    Last Name *{" "}
                   </InputLabel>
                   <StyledTextField
-                    variant='outlined'
+                    variant="outlined"
                     autoFocus
-                    id='lastName'
-                    name='lastName'
-                    placeholder='Last name'
-                    type='text'
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Last name"
+                    type="text"
                     value={supportForm.lastName}
                     onChange={handleChange}
                     fullWidth
@@ -358,18 +344,18 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
               >
                 <InputLabel
                   className={classes.inputLabel}
-                  htmlFor='my-input'
+                  htmlFor="my-input"
                   style={{ marginBottom: 14 }}
                 >
-                  Email *{' '}
+                  Email *{" "}
                 </InputLabel>
                 <StyledTextField
-                  variant='outlined'
+                  variant="outlined"
                   autoFocus
-                  id='email'
-                  name='email'
-                  placeholder='Email'
-                  type='text'
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  type="text"
                   value={supportForm.email}
                   onChange={handleChange}
                   fullWidth
@@ -378,27 +364,22 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
                 />
               </Grid>
               {!customerSupportForm && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  style={{ marginTop: 25 }}
-                >
+                <Grid item xs={12} md={6} style={{ marginTop: 25 }}>
                   <InputLabel
                     className={classes.inputLabel}
-                    htmlFor='my-input'
+                    htmlFor="my-input"
                     style={{ marginBottom: 14 }}
                   >
-                    {' '}
-                    Mobile Number *{' '}
+                    {" "}
+                    Mobile Number *{" "}
                   </InputLabel>
                   <StyledTextField
-                    variant='outlined'
+                    variant="outlined"
                     autoFocus
-                    id='mobileNumber'
-                    name='mobileNumber'
-                    placeholder='Mobile Number'
-                    type='text'
+                    id="mobileNumber"
+                    name="mobileNumber"
+                    placeholder="Mobile Number"
+                    type="text"
                     value={supportForm.mobileNumber}
                     onChange={handleChange}
                     fullWidth
@@ -407,28 +388,23 @@ export default function AddModalForm({ customerSupportForm, data, dateRange }) {
                   />
                 </Grid>
               )}
-              <Grid
-                item
-                xs={12}
-                md={12}
-                style={{ marginTop: 25 }}
-              >
+              <Grid item xs={12} md={12} style={{ marginTop: 25 }}>
                 <InputLabel
                   className={classes.inputLabel}
-                  htmlFor='my-input'
+                  htmlFor="my-input"
                   style={{ marginBottom: 14 }}
                 >
-                  {' '}
-                  Message *{' '}
+                  {" "}
+                  Message *{" "}
                 </InputLabel>
                 <TextField
-                  style={{ borderRadius: 10, minWidth: '100%' }}
-                  id='formSupportMessage'
-                  name='message'
-                  placeholder='Type your message here'
+                  style={{ borderRadius: 10, minWidth: "100%" }}
+                  id="formSupportMessage"
+                  name="message"
+                  placeholder="Type your message here"
                   multiline
                   rows={7}
-                  variant='outlined'
+                  variant="outlined"
                   value={supportForm.message}
                   onChange={handleChange}
                   error={errors.message ? true : false}

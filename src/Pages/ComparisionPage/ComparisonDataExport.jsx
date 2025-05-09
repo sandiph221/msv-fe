@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import React, { Component, useEffect, useState } from "react";
+import { Component, useEffect, useState } from "react";
 import ReactExport from "react-data-export";
 import { useSelector } from "react-redux";
 
@@ -15,7 +15,7 @@ const ComparisonDataExport = ({
   fanGrowthDateFilter,
   showDownloadSnackBar,
   xlsxLogo,
-  onClick
+  onClick,
 }) => {
   const [interactionExcellData, setInteractionExcellData] = useState([]);
   const [interactionDataCount, setInteractionDataCount] = useState([]);
@@ -38,7 +38,6 @@ const ComparisonDataExport = ({
   const [profileTopPostCount, setProfileTopPostCount] = useState([]);
   const [profileTopPostExcellData, setProfileTopPostExcellData] = useState([]);
 
-
   const {
     interactionData,
     postsDataMultiple,
@@ -47,7 +46,7 @@ const ComparisonDataExport = ({
     fansGrowth,
     contentNewsFeed,
     activeSocialMediaType,
-    customDateRangeRed
+    customDateRangeRed,
   } = useSelector((state) => state.socialMediaProfileListReducer);
 
   //setting value for interactions data for excell export
@@ -93,7 +92,7 @@ const ComparisonDataExport = ({
                 ? "1k per interactions data"
                 : "Interactions data",
             },
-            { title: `Filter_by: ${interactionDateFilter}` }
+            { title: `Filter_by: ${interactionDateFilter}` },
           ],
           data: interactionDataCount,
         },
@@ -245,60 +244,56 @@ const ComparisonDataExport = ({
   //seting top post value for excell data export
 
   useEffect(() => {
-   
-    const { feeds,  pages } =
-    contentNewsFeed ? contentNewsFeed : "";
+    const { feeds, pages } = contentNewsFeed ? contentNewsFeed : "";
     setProfileTopPostCount([]);
-    if(feeds) {
+    if (feeds) {
       for (let i = 0; i < feeds.length; ++i) {
-          if (feeds[i]) {
-            let data = [
-              { value: i },
-              { value: feeds[i].feed_created_date },
-              { value: feeds[i].profile_info.page_name },
-              { value: feeds[i].feed_link },
-              { value: feeds[i].feed_type },
-              { value: feeds[i].caption },
-              // { value: feeds[i].attachment },
-              { value: feeds[i].feed_comment_count },
-              { value: feeds[i].feed_like_count },
-              { value: feeds[i].feed_share_count },
-              { value: feeds[i].total_engagement },
-              {
-                value:feeds[i].avg_interaction_per_1k_fans
-              },
-            ];
-            setProfileTopPostCount((prevState) => [...prevState, data]);
-          }
+        if (feeds[i]) {
+          let data = [
+            { value: i },
+            { value: feeds[i].feed_created_date },
+            { value: feeds[i].profile_info.page_name },
+            { value: feeds[i].feed_link },
+            { value: feeds[i].feed_type },
+            { value: feeds[i].caption },
+            // { value: feeds[i].attachment },
+            { value: feeds[i].feed_comment_count },
+            { value: feeds[i].feed_like_count },
+            { value: feeds[i].feed_share_count },
+            { value: feeds[i].total_engagement },
+            {
+              value: feeds[i].avg_interaction_per_1k_fans,
+            },
+          ];
+          setProfileTopPostCount((prevState) => [...prevState, data]);
         }
+      }
     }
-  
-}, [contentNewsFeed,]);
-useEffect(() => {
-  if (profileTopPostCount) {
-    setProfileTopPostExcellData([
-      {
-        columns: [
-          { title: "#" },
-          { title: "Date" },
-          { title: "Page name" },
-          { title: "URL" },
-          { title: "Post type" },
-          { title: "Caption" },
-          // { title: "Post URL" },
-          { title: "Comment" },
-          { title: "Like" },
-          { title: "Share" },
-          { title: "Total engagement" },
-          { title: "Engagement per 1k fans" },
-        ],
-        data: profileTopPostCount,
-      },
-    ]);
-  }
-}, [profileTopPostCount]);
+  }, [contentNewsFeed]);
+  useEffect(() => {
+    if (profileTopPostCount) {
+      setProfileTopPostExcellData([
+        {
+          columns: [
+            { title: "#" },
+            { title: "Date" },
+            { title: "Page name" },
+            { title: "URL" },
+            { title: "Post type" },
+            { title: "Caption" },
+            // { title: "Post URL" },
+            { title: "Comment" },
+            { title: "Like" },
+            { title: "Share" },
+            { title: "Total engagement" },
+            { title: "Engagement per 1k fans" },
+          ],
+          data: profileTopPostCount,
+        },
+      ]);
+    }
+  }, [profileTopPostCount]);
 
-  
   const overviewDataSet = [
     {
       columns: [
@@ -316,7 +311,7 @@ useEffect(() => {
               customDateRangeRed[0].startDate
             ).toDateString()} to ${new Date(
               customDateRangeRed[0].endDate
-            ).toDateString()} `
+            ).toDateString()} `,
           },
         ],
         [{ value: " " }, { value: "" }, { value: "" }],
@@ -324,9 +319,7 @@ useEffect(() => {
           { value: "pages name", style: { font: { bold: true } } },
           { value: " " },
           {
-            value: `${selectedProfilesListToComapre.map(
-              (data) => data.name
-            )}`,
+            value: `${selectedProfilesListToComapre.map((data) => data.name)}`,
           },
         ],
       ],
@@ -342,13 +335,19 @@ useEffect(() => {
             onClick={() => {
               onClick();
 
-              showDownloadSnackBar(true)
+              showDownloadSnackBar(true);
               setTimeout(() => {
-                showDownloadSnackBar(false)
-              }, 2000)
+                showDownloadSnackBar(false);
+              }, 2000);
             }}
-            style={{ fontSize: 15, cursor: "pointer" }}>
-            <img style={{ width: 20, height: 20, marginRight: 5 }} alt="pdf logo" src={xlsxLogo} /> Export xlsx
+            style={{ fontSize: 15, cursor: "pointer" }}
+          >
+            <img
+              style={{ width: 20, height: 20, marginRight: 5 }}
+              alt="pdf logo"
+              src={xlsxLogo}
+            />{" "}
+            Export xlsx
           </Typography>
         }
       >
@@ -357,10 +356,7 @@ useEffect(() => {
           dataSet={interactionExcellData}
           name="total_number_of_interactions"
         />
-        <ExcelSheet
-          dataSet={fanGrowthExcellData}
-          name="fan_growth "
-        />
+        <ExcelSheet dataSet={fanGrowthExcellData} name="fan_growth " />
         <ExcelSheet
           dataSet={postsDataMultipleExcellData}
           name="top_post_type_overview"
